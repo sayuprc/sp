@@ -37,14 +37,17 @@ install: ## Install libraries
 .PHONY: cs
 cs: ## Check code format
 	docker compose exec -T sp composer cs
+	docker compose exec -T sp composer cs-bin
 
 .PHONY: csf
 csf: ## Execute code formatting
 	docker compose exec -T sp composer csf
+	docker compose exec -T sp composer csf-bin
 
 .PHONY: stan
 stan: ## Perform static analysis
 	docker compose exec -T sp composer stan
+	docker compose exec -T sp composer stan-bin
 
 .PHONY: tests
 tests: ## Running tests
