@@ -1,0 +1,38 @@
+{
+    "name": "sayuprc/strict-php",
+    "description": "Strict PHP interpreter",
+    "type": "library",
+    "require": {
+        "nikic/php-parser": "^5.0"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.10",
+        "phpunit/phpunit": "^11.1",
+        "friendsofphp/php-cs-fixer": "^3.54"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "StrictPhp\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "sayuprc"
+        }
+    ],
+    "bin": [
+        "bin/sp"
+    ],
+    "scripts": {
+        "cs": "php-cs-fixer fix --path-mode=intersection --dry-run --diff . || php-cs-fixer fix --path-mode=intersection --dry-run --diff bin/sp",
+        "csf": "php-cs-fixer fix --path-mode=intersection . && php-cs-fixer fix --path-mode=intersection bin/sp",
+        "stan": "phpstan analyse --memory-limit=-1 || phpstan analyse --memory-limit=-1 bin/sp",
+        "tests": "phpunit tests"
+    }
+}
