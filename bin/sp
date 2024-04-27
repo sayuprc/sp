@@ -2,3 +2,36 @@
 <?php
 
 declare(strict_types=1);
+
+use PhpParser\PhpVersion;
+use StrictPhp\Interpreter;
+use PhpParser\ParserFactory;
+
+foreach ([__DIR__ . '/../../../autoload.php', __DIR__ . '/../vendor/autoload.php'] as $file) {
+    if (file_exists($file)) {
+        require $file;
+
+        break;
+    }
+}
+
+$index = null;
+$options = getopt('', ['debug'], $index);
+$args = array_slice($argv, (int)$index);
+$isDebug = match (true) {
+    isset($options['debug']) => true,
+    default => false,
+};
+$file = $args[0] ?? '';
+$lines = file($file);
+
+$parser = (new ParserFactory())->createForVersion(PhpVersion::fromString('8.2'));
+
+try {
+    $interpreter = new Interpreter($parser, $isDebug);
+
+    $code = implode(PHP_EOL, $lines);
+    $interpreter->run($code);
+} catch (Error $error) {
+    echo "Parse error: {$error->getMessage()}", PHP_EOL;
+}
