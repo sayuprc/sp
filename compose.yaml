@@ -1,0 +1,7 @@
+services:
+  sp:
+    image: sp:0.1
+    container_name: sp
+    tty: true
+    volumes:
+      - .:/var/www
