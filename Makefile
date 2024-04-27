@@ -5,6 +5,13 @@ USERNAME := $(shell id -u -n)
 GID := $(shell id -g)
 GROUPNAME := $(shell id -g -n)
 
+.PHONY: hooks
+hooks: ## Set up git hooks
+	cp git-hooks/pre-commit .git/hooks/pre-commit
+	chmod 777 .git/hooks/pre-commit
+	cp git-hooks/pre-push .git/hooks/pre-push
+	chmod 777 .git/hooks/pre-push
+
 .PHONY: build
 build: ## Build a docker image
 	docker build \
@@ -25,23 +32,26 @@ down: ## Delete the container
 
 .PHONY: install
 install: ## Install libraries
-	docker compose exec sp composer install
+	docker compose exec -T sp composer install
 
 .PHONY: cs
 cs: ## Check code format
-	docker compose exec sp composer cs
+	docker compose exec -T sp composer cs
+	docker compose exec -T sp composer cs-bin
 
 .PHONY: csf
 csf: ## Execute code formatting
-	docker compose exec sp composer csf
+	docker compose exec -T sp composer csf
+	docker compose exec -T sp composer csf-bin
 
 .PHONY: stan
 stan: ## Perform static analysis
-	docker compose exec sp composer stan
+	docker compose exec -T sp composer stan
+	docker compose exec -T sp composer stan-bin
 
 .PHONY: tests
 tests: ## Running tests
-	docker compose exec sp composer tests
+	docker compose exec -T sp composer tests
 
 .PHONY: help
 help: ## Display a list of targets

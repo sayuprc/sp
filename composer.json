@@ -30,9 +30,12 @@
         "bin/sp"
     ],
     "scripts": {
-        "cs": "php-cs-fixer fix --path-mode=intersection --dry-run --diff . || php-cs-fixer fix --path-mode=intersection --dry-run --diff bin/sp",
-        "csf": "php-cs-fixer fix --path-mode=intersection . && php-cs-fixer fix --path-mode=intersection bin/sp",
-        "stan": "phpstan analyse --memory-limit=-1 || phpstan analyse --memory-limit=-1 bin/sp",
+        "cs": "php-cs-fixer fix --path-mode=intersection --dry-run --diff .",
+        "cs-bin": "php-cs-fixer fix --dry-run --diff bin/sp",
+        "csf": "php-cs-fixer fix --path-mode=intersection .",
+        "csf-bin": "php-cs-fixer fix bin/sp",
+        "stan": "phpstan analyse --memory-limit=-1",
+        "stan-bin": "phpstan analyse --memory-limit=-1 bin/sp",
         "tests": "phpunit tests"
     }
 }

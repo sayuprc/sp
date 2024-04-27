@@ -1,0 +1,5 @@
+#!/bin/bash
+
+make cs || { echo -e "\e[31m pre-push check failure: Violation of code covenants \e[m"; exit 1; }
+make stan || { echo -e "\e[31m pre-push check failure: Error in static analysis \e[m"; exit 1; }
+make tests || { echo -e "\e[31m pre-push check failure: Test failure \e[m"; exit 1; }
