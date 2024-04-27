@@ -35,7 +35,7 @@ class Interpreter
 
         if ($this->isDebug) {
             $dumper = new NodeDumper();
-            echo $dumper->dump($ast) ,PHP_EOL;
+            echo $dumper->dump($ast), PHP_EOL;
         }
 
         foreach ($ast as $stmt) {
@@ -50,21 +50,20 @@ class Interpreter
      */
     public function evaluate($stmt)
     {
-        if ($stmt instanceof Echo_) {
-            $ret = [];
-
-            foreach ($stmt->exprs as $expr) {
-                $ret[] = $this->evaluate($expr);
-            }
-            echo implode('', $ret);
-        } elseif (
-            $stmt instanceof String_
-            || $stmt instanceof Int_
-            || $stmt instanceof Float_
-        ) {
-            return $stmt->value;
-        } elseif ($stmt instanceof Concat) {
-            return $this->evaluate($stmt->left) . $this->evaluate($stmt->right);
+        switch (get_class($stmt)) {
+            case Echo_::class:
+                $ret = [];
+                foreach ($stmt->exprs as $expr) {
+                    $ret[] = $this->evaluate($expr);
+                }
+                echo implode('', $ret);
+                return null;
+            case String_::class:
+            case Int_::class:
+            case Float_::class:
+                return $stmt->value;
+            case Concat::class:
+                return $this->evaluate($stmt->left) . $this->evaluate($stmt->right);
         }
     }
 }
