@@ -127,7 +127,6 @@ return (new PhpCsFixer\Config())
         'single_line_comment_style' => true,
         'single_quote' => true,
         'single_space_around_construct' => true,
-        'strict_comparison' => true,
 
         'trailing_comma_in_multiline' => true,
         'trim_array_spaces' => true,
