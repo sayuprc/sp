@@ -11,9 +11,12 @@ class EchoTest extends TestCase
      */
     public function testEchoString(): void
     {
-        $this->expectOutputString('a');
+        $code = <<<CODE
+        <?php
+        echo 'a';
+        CODE;
 
-        $this->interpreter->run("<?php echo 'a';");
+        $this->expectOutputStringWithCode('a', $code);
     }
 
     /**
@@ -21,9 +24,12 @@ class EchoTest extends TestCase
      */
     public function testEchoInt(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 1;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1;');
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -31,9 +37,12 @@ class EchoTest extends TestCase
      */
     public function testEchoFloat(): void
     {
-        $this->expectOutputString('1.1');
+        $code = <<<CODE
+        <?php
+        echo 1.1;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1.1;');
+        $this->expectOutputStringWithCode('1.1', $code);
     }
 
     /**
@@ -41,8 +50,11 @@ class EchoTest extends TestCase
      */
     public function testEchoMultiElements(): void
     {
-        $this->expectOutputString('ab');
+        $code = <<<CODE
+        <?php
+        echo 'a', 'b';
+        CODE;
 
-        $this->interpreter->run('<?php echo "a", "b";');
+        $this->expectOutputStringWithCode('ab', $code);
     }
 }

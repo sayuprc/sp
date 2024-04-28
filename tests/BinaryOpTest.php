@@ -11,9 +11,12 @@ class BinaryOpTest extends TestCase
      */
     public function testPlus(): void
     {
-        $this->expectOutputString('2');
+        $code = <<<CODE
+        <?php
+        echo 1 + 1;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 + 1;');
+        $this->expectOutputStringWithCode('2', $code);
     }
 
     /**
@@ -21,9 +24,12 @@ class BinaryOpTest extends TestCase
      */
     public function testMinus(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 2 - 1;
+        CODE;
 
-        $this->interpreter->run('<?php echo 2 - 1;');
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -31,9 +37,12 @@ class BinaryOpTest extends TestCase
      */
     public function testMul(): void
     {
-        $this->expectOutputString('4');
+        $code = <<<CODE
+        <?php
+        echo 2 * 2;
+        CODE;
 
-        $this->interpreter->run('<?php echo 2 * 2;');
+        $this->expectOutputStringWithCode('4', $code);
     }
 
     /**
@@ -41,9 +50,12 @@ class BinaryOpTest extends TestCase
      */
     public function testDiv(): void
     {
-        $this->expectOutputString('3');
+        $code = <<<CODE
+        <?php
+        echo 6 / 2;
+        CODE;
 
-        $this->interpreter->run('<?php echo 6 / 2;');
+        $this->expectOutputStringWithCode('3', $code);
     }
 
     /**
@@ -51,9 +63,12 @@ class BinaryOpTest extends TestCase
      */
     public function testMod(): void
     {
-        $this->expectOutputString('2');
+        $code = <<<CODE
+        <?php
+        echo 5 % 3;
+        CODE;
 
-        $this->interpreter->run('<?php echo 5 % 3;');
+        $this->expectOutputStringWithCode('2', $code);
     }
 
     /**
@@ -61,9 +76,12 @@ class BinaryOpTest extends TestCase
      */
     public function testPow(): void
     {
-        $this->expectOutputString('9');
+        $code = <<<CODE
+        <?php
+        echo 3 ** 2;
+        CODE;
 
-        $this->interpreter->run('<?php echo 3 ** 2;');
+        $this->expectOutputStringWithCode('9', $code);
     }
 
     /**
@@ -71,9 +89,12 @@ class BinaryOpTest extends TestCase
      */
     public function testConcat(): void
     {
-        $this->expectOutputString('12');
+        $code = <<<CODE
+        <?php
+        echo 1 . 2;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 . 2;');
+        $this->expectOutputStringWithCode('12', $code);
     }
 
     /**
@@ -81,9 +102,12 @@ class BinaryOpTest extends TestCase
      */
     public function testSmallerIsTrue(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 1 < 2;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 < 2;');
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -91,9 +115,12 @@ class BinaryOpTest extends TestCase
      */
     public function testSmallerIsFalse(): void
     {
-        $this->expectOutputString('');
+        $code = <<<CODE
+        <?php
+        echo 2 < 1;
+        CODE;
 
-        $this->interpreter->run('<?php echo 2 < 1;');
+        $this->expectOutputStringWithCode('', $code);
     }
 
     /**
@@ -101,9 +128,12 @@ class BinaryOpTest extends TestCase
      */
     public function testSmallerOrEqualIsTrue(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 1 <= 2;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 <= 2;');
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -111,9 +141,12 @@ class BinaryOpTest extends TestCase
      */
     public function testSmallerOrEqualIsFalse(): void
     {
-        $this->expectOutputString('');
+        $code = <<<CODE
+        <?php
+        echo 2 <= 1;
+        CODE;
 
-        $this->interpreter->run('<?php echo 2 <= 1;');
+        $this->expectOutputStringWithCode('', $code);
     }
 
     /**
@@ -121,9 +154,12 @@ class BinaryOpTest extends TestCase
      */
     public function testGreaterIsTrue(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 2 > 1;
+        CODE;
 
-        $this->interpreter->run('<?php echo 2 > 1;');
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -131,9 +167,12 @@ class BinaryOpTest extends TestCase
      */
     public function testGreaterIsFalse(): void
     {
-        $this->expectOutputString('');
+        $code = <<<CODE
+        <?php
+        echo 1 > 2;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 > 2;');
+        $this->expectOutputStringWithCode('', $code);
     }
 
     /**
@@ -141,9 +180,12 @@ class BinaryOpTest extends TestCase
      */
     public function testGreaterOrEqualIsTrue(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 2 >= 1;
+        CODE;
 
-        $this->interpreter->run('<?php echo 2 > 1;');
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -151,9 +193,12 @@ class BinaryOpTest extends TestCase
      */
     public function testGreaterOrEqualIsFalse(): void
     {
-        $this->expectOutputString('');
+        $code = <<<CODE
+        <?php
+        echo 1 >= 2;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 >= 2;');
+        $this->expectOutputStringWithCode('', $code);
     }
 
     /**
@@ -161,9 +206,12 @@ class BinaryOpTest extends TestCase
      */
     public function testSpaceshipIsSmaller(): void
     {
-        $this->expectOutputString('-1');
+        $code = <<<CODE
+        <?php
+        echo 1 <=> 2;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 <=> 2;');
+        $this->expectOutputStringWithCode('-1', $code);
     }
 
     /**
@@ -171,9 +219,12 @@ class BinaryOpTest extends TestCase
      */
     public function testSpaceshipIsEqual(): void
     {
-        $this->expectOutputString('0');
+        $code = <<<CODE
+        <?php
+        echo 1 <=> 1;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 <=> 1;');
+        $this->expectOutputStringWithCode('0', $code);
     }
 
     /**
@@ -181,9 +232,12 @@ class BinaryOpTest extends TestCase
      */
     public function testSpaceshipIsGreater(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 2 <=> 1;
+        CODE;
 
-        $this->interpreter->run('<?php echo 2 <=> 1;');
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -191,9 +245,12 @@ class BinaryOpTest extends TestCase
      */
     public function testEqualSameType(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 1 == 1;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 == 1;');
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -201,9 +258,12 @@ class BinaryOpTest extends TestCase
      */
     public function testNotEqualSameType(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 1 != 0;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 != 0;');
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -211,9 +271,12 @@ class BinaryOpTest extends TestCase
      */
     public function testEqualNotSameType(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 1 == '1';
+        CODE;
 
-        $this->interpreter->run("<?php echo 1 == '1';");
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -221,9 +284,12 @@ class BinaryOpTest extends TestCase
      */
     public function testNotEqualNotSameType(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 1 != '0';
+        CODE;
 
-        $this->interpreter->run("<?php echo 1 != '0';");
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -231,9 +297,12 @@ class BinaryOpTest extends TestCase
      */
     public function testIdenticalSameType(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 1 === 1;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 === 1;');
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -241,9 +310,12 @@ class BinaryOpTest extends TestCase
      */
     public function testNotIdenticalSameType(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 1 !== 0;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 !== 0;');
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -251,9 +323,12 @@ class BinaryOpTest extends TestCase
      */
     public function testIdenticalNotSameType(): void
     {
-        $this->expectOutputString('');
+        $code = <<<CODE
+        <?php
+        echo 1 === '1';
+        CODE;
 
-        $this->interpreter->run("<?php echo 1 === '1';");
+        $this->expectOutputStringWithCode('', $code);
     }
 
     /**
@@ -261,9 +336,12 @@ class BinaryOpTest extends TestCase
      */
     public function testNotIdenticalNotSameType(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 1 !== '1';
+        CODE;
 
-        $this->interpreter->run("<?php echo 1 !== '1';");
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -271,9 +349,12 @@ class BinaryOpTest extends TestCase
      */
     public function testBooleanAndIsTrue(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 1 && 1;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 && 1;');
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -281,9 +362,12 @@ class BinaryOpTest extends TestCase
      */
     public function testBooleanAndIsFalse(): void
     {
-        $this->expectOutputString('');
+        $code = <<<CODE
+        <?php
+        echo 1 && 0;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 && 0;');
+        $this->expectOutputStringWithCode('', $code);
     }
 
     /**
@@ -291,9 +375,12 @@ class BinaryOpTest extends TestCase
      */
     public function testBooleanOrIsTrue(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 1 || 0;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 || 0;');
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -301,9 +388,12 @@ class BinaryOpTest extends TestCase
      */
     public function testBooleanOrIsFalse(): void
     {
-        $this->expectOutputString('');
+        $code = <<<CODE
+        <?php
+        echo 0 || 0;
+        CODE;
 
-        $this->interpreter->run('<?php echo 0 || 0;');
+        $this->expectOutputStringWithCode('', $code);
     }
 
     /**
@@ -311,9 +401,12 @@ class BinaryOpTest extends TestCase
      */
     public function testLogicalAndIsTrue(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 1 and 1;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 and 1;');
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -321,9 +414,12 @@ class BinaryOpTest extends TestCase
      */
     public function testLogicalAndIsFalse(): void
     {
-        $this->expectOutputString('');
+        $code = <<<CODE
+        <?php
+        echo 1 and 0;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 and 0;');
+        $this->expectOutputStringWithCode('', $code);
     }
 
     /**
@@ -331,9 +427,12 @@ class BinaryOpTest extends TestCase
      */
     public function testLogicalOrIsTrue(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 1 or 0;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 or 0;');
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -341,9 +440,12 @@ class BinaryOpTest extends TestCase
      */
     public function testLogicalOrIsFalse(): void
     {
-        $this->expectOutputString('');
+        $code = <<<CODE
+        <?php
+        echo 0 or 0;
+        CODE;
 
-        $this->interpreter->run('<?php echo 0 or 0;');
+        $this->expectOutputStringWithCode('', $code);
     }
 
     /**
@@ -353,9 +455,12 @@ class BinaryOpTest extends TestCase
      */
     public function testLogicalXorIsTrue(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo 1 xor 0;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 xor 0;');
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -365,9 +470,12 @@ class BinaryOpTest extends TestCase
      */
     public function testLogicalXorIsFalse(): void
     {
-        $this->expectOutputString('');
+        $code = <<<CODE
+        <?php
+        echo 1 xor 1;
+        CODE;
 
-        $this->interpreter->run('<?php echo 1 xor 1;');
+        $this->expectOutputStringWithCode('', $code);
     }
 
     /**
@@ -377,9 +485,12 @@ class BinaryOpTest extends TestCase
      */
     public function testCoalesce(): void
     {
-        $this->expectOutputString('1');
+        $code = <<<CODE
+        <?php
+        echo null ?? 1;
+        CODE;
 
-        $this->interpreter->run('<?php echo null ?? 1;');
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -387,12 +498,15 @@ class BinaryOpTest extends TestCase
      */
     public function testShiftLeft(): void
     {
-        $this->expectOutputString('44');
+        $code = <<<CODE
+        <?php
+        echo 11 << 2;
+        CODE;
 
         // 11 => 00001011
         // << 2 => 00101100 => 44
 
-        $this->interpreter->run('<?php echo 11 << 2;');
+        $this->expectOutputStringWithCode('44', $code);
     }
 
     /**
@@ -400,12 +514,15 @@ class BinaryOpTest extends TestCase
      */
     public function testShiftRight(): void
     {
-        $this->expectOutputString('2');
+        $code = <<<CODE
+        <?php
+        echo 10 >> 2;
+        CODE;
 
         // 10 => 00001010
         // >> 2 => 00000010 => 2
 
-        $this->interpreter->run('<?php echo 10 >> 2;');
+        $this->expectOutputStringWithCode('2', $code);
     }
 
     /**
@@ -413,13 +530,16 @@ class BinaryOpTest extends TestCase
      */
     public function testBitwiseAnd(): void
     {
+        $code = <<<CODE
+        <?php
+        echo 1 & 2;
+        CODE;
+
         // 1 => 00000001
         // 2 => 00000010
         // & => 00000000
 
-        $this->expectOutputString('0');
-
-        $this->interpreter->run('<?php echo 1 & 2;');
+        $this->expectOutputStringWithCode('0', $code);
     }
 
     /**
@@ -427,13 +547,16 @@ class BinaryOpTest extends TestCase
      */
     public function testBitwiseOr(): void
     {
+        $code = <<<CODE
+        <?php
+        echo 1 | 2;
+        CODE;
+
         // 1 => 00000001
         // 2 => 00000010
         // | => 00000011
 
-        $this->expectOutputString('3');
-
-        $this->interpreter->run('<?php echo 1 | 2;');
+        $this->expectOutputStringWithCode('3', $code);
     }
 
     /**
@@ -441,12 +564,15 @@ class BinaryOpTest extends TestCase
      */
     public function testBitwiseXor(): void
     {
+        $code = <<<CODE
+        <?php
+        echo 1 ^ 3;
+        CODE;
+
         // 1 => 00000001
         // 3 => 00000011
         // ^ => 00000010
 
-        $this->expectOutputString('2');
-
-        $this->interpreter->run('<?php echo 1 ^ 3;');
+        $this->expectOutputStringWithCode('2', $code);
     }
 }

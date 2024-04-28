@@ -17,9 +17,7 @@ class AssignTest extends TestCase
         echo \$var;
         CODE;
 
-        $this->expectOutputString('a');
-
-        $this->interpreter->run($code);
+        $this->expectOutputStringWithCode('a', $code);
     }
 
     /**
@@ -32,9 +30,7 @@ class AssignTest extends TestCase
         echo \$var;
         CODE;
 
-        $this->expectOutputString('');
-
-        $this->interpreter->run($code);
+        $this->expectOutputStringWithCode('', $code);
     }
 
     /**
@@ -48,8 +44,6 @@ class AssignTest extends TestCase
         echo \$foo, \$bar, \$baz;
         CODE;
 
-        $this->expectOutputString('101010');
-
-        $this->interpreter->run($code);
+        $this->expectOutputStringWithCode('101010', $code);
     }
 }

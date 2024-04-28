@@ -27,4 +27,16 @@ class TestCase extends BaseTestCase
 
         $this->interpreter = new Interpreter($parser);
     }
+
+    /**
+     * @param string $expected
+     * @param string $code
+     *
+     * @return void
+     */
+    protected function expectOutputStringWithCode(string $expected, string $code): void
+    {
+        $this->expectOutputString($expected);
+        $this->interpreter->run($code);
+    }
 }
