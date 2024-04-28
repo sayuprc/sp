@@ -18,9 +18,7 @@ class IfTest extends TestCase
 		}
 		CODE;
 
-        $this->expectOutputString('1');
-
-        $this->interpreter->run($code);
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -37,9 +35,7 @@ class IfTest extends TestCase
 		}
 		CODE;
 
-        $this->expectOutputString('0');
-
-        $this->interpreter->run($code);
+        $this->expectOutputStringWithCode('0', $code);
     }
 
     /**
@@ -56,9 +52,7 @@ class IfTest extends TestCase
 		}
 		CODE;
 
-        $this->expectOutputString('0');
-
-        $this->interpreter->run('<?php if (1 < 0) { echo 1; } else { echo 0; }');
+        $this->expectOutputStringWithCode('0', $code);
     }
 
     /**
@@ -75,9 +69,7 @@ class IfTest extends TestCase
 		}
 		CODE;
 
-        $this->expectOutputString('1');
-
-        $this->interpreter->run($code);
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -96,9 +88,7 @@ class IfTest extends TestCase
 		}
 		CODE;
 
-        $this->expectOutputString('0');
-
-        $this->interpreter->run($code);
+        $this->expectOutputStringWithCode('0', $code);
     }
 
     /**
@@ -117,9 +107,7 @@ class IfTest extends TestCase
 		}
 		CODE;
 
-        $this->expectOutputString('0');
-
-        $this->interpreter->run($code);
+        $this->expectOutputStringWithCode('0', $code);
     }
 
     /**
@@ -138,8 +126,6 @@ class IfTest extends TestCase
 		}
 		CODE;
 
-        $this->expectOutputString('a');
-
-        $this->interpreter->run($code);
+        $this->expectOutputStringWithCode('a', $code);
     }
 }

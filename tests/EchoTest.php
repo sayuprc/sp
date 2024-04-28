@@ -16,9 +16,7 @@ class EchoTest extends TestCase
         echo 'a';
         CODE;
 
-        $this->expectOutputString('a');
-
-        $this->interpreter->run($code);
+        $this->expectOutputStringWithCode('a', $code);
     }
 
     /**
@@ -31,9 +29,7 @@ class EchoTest extends TestCase
         echo 1;
         CODE;
 
-        $this->expectOutputString('1');
-
-        $this->interpreter->run($code);
+        $this->expectOutputStringWithCode('1', $code);
     }
 
     /**
@@ -46,9 +42,7 @@ class EchoTest extends TestCase
         echo 1.1;
         CODE;
 
-        $this->expectOutputString('1.1');
-
-        $this->interpreter->run($code);
+        $this->expectOutputStringWithCode('1.1', $code);
     }
 
     /**
@@ -61,8 +55,6 @@ class EchoTest extends TestCase
         echo 'a', 'b';
         CODE;
 
-        $this->expectOutputString('ab');
-
-        $this->interpreter->run($code);
+        $this->expectOutputStringWithCode('ab', $code);
     }
 }
