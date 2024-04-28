@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace StrictPhp;
 
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BitwiseAnd;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\BinaryOp\BitwiseXor;
@@ -31,12 +32,14 @@ use PhpParser\Node\Expr\BinaryOp\ShiftRight;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\BinaryOp\Spaceship;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeDumper;
@@ -45,6 +48,11 @@ use PhpParser\Parser;
 class Interpreter
 {
     /**
+     * @var array
+     */
+    private array $variables;
+
+    /**
      * @param Parser $parser
      * @param bool   $isDebug
      */
@@ -52,6 +60,7 @@ class Interpreter
         private readonly Parser $parser,
         private readonly bool $isDebug = false
     ) {
+        $this->variables = [];
     }
 
     /**
@@ -183,6 +192,19 @@ class Interpreter
             case Nop::class:
                 // nothing todo
                 break;
+            case Expression::class:
+                return $this->evaluate($stmt->expr);
+            case Assign::class:
+                $var = $stmt->var;
+                if ($var instanceof Variable) {
+                    $ret = $this->evaluate($stmt->expr);
+                    $this->variables[$var->name] = $ret;
+                    return $ret;
+                }
+                break;
+            case Variable::class:
+                $name = $stmt->name;
+                return $this->variables[$name] ?? null;
         }
     }
 }
