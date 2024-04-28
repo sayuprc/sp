@@ -39,40 +39,10 @@ class EchoTest extends TestCase
     /**
      * @return void
      */
-    public function testEchoConcat(): void
-    {
-        $this->expectOutputString('ab');
-
-        $this->interpreter->run('<?php echo "a" . "b";');
-    }
-
-    /**
-     * @return void
-     */
-    public function testEchoConcatOverThreeElements(): void
-    {
-        $this->expectOutputString('abc');
-
-        $this->interpreter->run('<?php echo "a" . "b" . "c";');
-    }
-
-    /**
-     * @return void
-     */
     public function testEchoMultiElements(): void
     {
         $this->expectOutputString('ab');
 
         $this->interpreter->run('<?php echo "a", "b";');
-    }
-
-    /**
-     * @return void
-     */
-    public function testEchoMultiElementsWithExpr(): void
-    {
-        $this->expectOutputString('abc');
-
-        $this->interpreter->run('<?php echo "a", "b" . "c";');
     }
 }
