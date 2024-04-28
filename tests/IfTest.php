@@ -121,4 +121,25 @@ class IfTest extends TestCase
 
         $this->interpreter->run($code);
     }
+
+    /**
+     * @return void
+     */
+    public function testAllTrue(): void
+    {
+        $code = <<<CODE
+		<?php
+		if (0 < 1) {
+			echo 'a';
+		} elseif (0 < 1) {
+			echo 'b';
+		} else {
+			echo 'c';
+		}
+		CODE;
+
+        $this->expectOutputString('a');
+
+        $this->interpreter->run($code);
+    }
 }

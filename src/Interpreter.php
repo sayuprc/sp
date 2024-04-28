@@ -147,29 +147,34 @@ class Interpreter
             case ShiftRight::class:
                 return $this->evaluate($stmt->left) >> $this->evaluate($stmt->right);
             case If_::class:
-                if ($this->evaluate($stmt->cond)) {
+                $ifResult = $this->evaluate($stmt->cond);
+
+                if ($ifResult) {
                     foreach ($stmt->stmts as $node) {
                         $this->evaluate($node);
                     }
                 }
 
-                if (0 < count($stmt->elseifs)) {
+                $elseIfResult = false;
+
+                if (! $ifResult && 0 < count($stmt->elseifs)) {
                     foreach ($stmt->elseifs as $elseif) {
-                        $this->evaluate($elseif);
+                        $elseIfResult = $this->evaluate($elseif);
                     }
                 }
 
-                if ($stmt->else instanceof Else_) {
+                if (! $ifResult && ! $elseIfResult && $stmt->else instanceof Else_) {
                     $this->evaluate($stmt->else);
                 }
                 break;
             case ElseIf_::class:
-                if ($this->evaluate($stmt->cond)) {
+                $elseIfResult = $this->evaluate($stmt->cond);
+                if ($elseIfResult) {
                     foreach ($stmt->stmts as $node) {
                         $this->evaluate($node);
                     }
                 }
-                break;
+                return $elseIfResult;
             case Else_::class:
                 foreach ($stmt->stmts as $node) {
                     $this->evaluate($node);
