@@ -16,14 +16,21 @@ foreach ([__DIR__ . '/../../../autoload.php', __DIR__ . '/../vendor/autoload.php
 }
 
 $index = null;
-$options = getopt('', ['debug'], $index);
+$options = getopt('r', ['debug'], $index);
 $args = array_slice($argv, (int)$index);
+$input = $args[0] ?? '';
+
 $isDebug = match (true) {
     isset($options['debug']) => true,
     default => false,
 };
-$file = $args[0] ?? '';
-$lines = file($file);
+$isDirectExecution = isset($options['r']);
+
+if ($isDirectExecution) {
+    $lines = ['<?php', $input];
+} else {
+    $lines = file($input);
+}
 
 $parser = (new ParserFactory())->createForVersion(PhpVersion::fromString('8.2'));
 

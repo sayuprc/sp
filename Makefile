@@ -61,6 +61,14 @@ run: ## bin/sp
 run-debug: ## Run bin/sp with debug option
 	docker compose exec sp ./bin/sp --debug ${file}
 
+.PHONY: run-script
+run-script: ## Run bin/sp with r option
+	docker compose exec sp ./bin/sp -r "${script}"
+
+.PHONY: run-debug-script
+run-debug-script: ## Run bin/sp with debug and r option
+	docker compose exec sp ./bin/sp --debug -r "${script}"
+
 .PHONY: help
 help: ## Display a list of targets
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
