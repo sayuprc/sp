@@ -35,6 +35,10 @@ use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Echo_;
+use PhpParser\Node\Stmt\Else_;
+use PhpParser\Node\Stmt\ElseIf_;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeDumper;
 use PhpParser\Parser;
 
@@ -142,6 +146,38 @@ class Interpreter
                 return $this->evaluate($stmt->left) << $this->evaluate($stmt->right);
             case ShiftRight::class:
                 return $this->evaluate($stmt->left) >> $this->evaluate($stmt->right);
+            case If_::class:
+                if ($this->evaluate($stmt->cond)) {
+                    foreach ($stmt->stmts as $node) {
+                        $this->evaluate($node);
+                    }
+                }
+
+                if (0 < count($stmt->elseifs)) {
+                    foreach ($stmt->elseifs as $elseif) {
+                        $this->evaluate($elseif);
+                    }
+                }
+
+                if ($stmt->else instanceof Else_) {
+                    $this->evaluate($stmt->else);
+                }
+                break;
+            case ElseIf_::class:
+                if ($this->evaluate($stmt->cond)) {
+                    foreach ($stmt->stmts as $node) {
+                        $this->evaluate($node);
+                    }
+                }
+                break;
+            case Else_::class:
+                foreach ($stmt->stmts as $node) {
+                    $this->evaluate($node);
+                }
+                break;
+            case Nop::class:
+                // nothing todo
+                break;
         }
     }
 }
