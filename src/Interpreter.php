@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace StrictPhp;
 
 use Exception;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
@@ -36,6 +37,7 @@ use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\BinaryOp\Spaceship;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
@@ -44,17 +46,24 @@ use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Nop;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeDumper;
 use PhpParser\Parser;
 
 class Interpreter
 {
     /**
+     * @var Scope
+     */
+    private Scope $scope;
+
+    /**
      * @var array
      */
-    private array $variables;
+    private array $functions;
 
     /**
      * @param Parser $parser
@@ -64,7 +73,8 @@ class Interpreter
         private readonly Parser $parser,
         private readonly bool $isDebug = false
     ) {
-        $this->variables = [];
+        $this->scope = new Scope();
+        $this->functions = [];
     }
 
     /**
@@ -217,13 +227,13 @@ class Interpreter
                         throw new Exception('cannot re-assign $this');
                     }
                     $ret = $this->evaluate($stmt->expr);
-                    $this->variables[$name] = $ret;
+                    $this->scope->set($name, $ret);
                     return $ret;
                 }
                 break;
             case Variable::class:
                 $name = $stmt->name;
-                return $this->variables[$name] ?? null;
+                return $this->scope->get($name);
             case ConstFetch::class:
                 return match ($stmt->name->name) {
                     'true' => true,
@@ -238,6 +248,40 @@ class Interpreter
                     return $array[$key];
                 }
                 throw new Exception("unknown index: {$key} in array");
+            case Function_::class:
+                $name = $stmt->name->toString();
+                $this->functions[$name] = [
+                    'params' => $stmt->params,
+                    'stmts' => $stmt->stmts,
+                ];
+                break;
+            case FuncCall::class:
+                $name = $stmt->name->toString();
+                if (array_key_exists($name, $this->functions)) {
+                    $function = $this->functions[$name];
+                    $args = [];
+                    foreach ($stmt->args as $arg) {
+                        $args[] = $this->evaluate($arg);
+                    }
+                    $functionScope = new Scope();
+                    foreach ($function['params'] as $key => $param) {
+                        $functionScope->set($param->var->name, $args[$key]);
+                    }
+                    $beforeScope = $this->scope;
+                    $this->scope = $functionScope;
+                    foreach ($function['stmts'] as $stmt) {
+                        $ret = $this->evaluate($stmt);
+                        if ($stmt instanceof Return_) {
+                            return $ret;
+                        }
+                    }
+                    $this->scope = $beforeScope;
+                }
+                break;
+            case Arg::class:
+                return $this->evaluate($stmt->value);
+            case Return_::class:
+                return $this->evaluate($stmt->expr);
         }
     }
 }
