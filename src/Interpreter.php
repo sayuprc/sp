@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace StrictPhp;
 
+use Exception;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BitwiseAnd;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
@@ -32,6 +33,7 @@ use PhpParser\Node\Expr\BinaryOp\ShiftRight;
 use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\BinaryOp\Spaceship;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
@@ -205,6 +207,13 @@ class Interpreter
             case Variable::class:
                 $name = $stmt->name;
                 return $this->variables[$name] ?? null;
+            case ConstFetch::class:
+                return match ($stmt->name->name) {
+                    'true' => true,
+                    'false' => false,
+                    'null' => null,
+                    default => throw new Exception('unknown const'),
+                };
         }
     }
 }
