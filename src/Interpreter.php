@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace StrictPhp;
 
 use Exception;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BitwiseAnd;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
@@ -103,6 +105,17 @@ class Interpreter
             case Int_::class:
             case Float_::class:
                 return $stmt->value;
+            case Array_::class:
+                $ret = [];
+                foreach ($stmt->items as $item) {
+                    $value = $this->evaluate($item->value);
+                    if (is_null($item->key)) {
+                        $ret[] = $value;
+                    } else {
+                        $ret[$this->evaluate($item->key)] = $value;
+                    }
+                }
+                return $ret;
             case Concat::class:
                 return $this->evaluate($stmt->left) . $this->evaluate($stmt->right);
             case Smaller::class:
@@ -214,6 +227,13 @@ class Interpreter
                     'null' => null,
                     default => throw new Exception('unknown const'),
                 };
+            case ArrayDimFetch::class:
+                $array = $this->evaluate($stmt->var);
+                $key = $this->evaluate($stmt->dim);
+                if (array_key_exists($key, $array)) {
+                    return $array[$key];
+                }
+                throw new Exception("unknown index: {$key} in array");
         }
     }
 }
