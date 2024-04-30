@@ -212,8 +212,12 @@ class Interpreter
             case Assign::class:
                 $var = $stmt->var;
                 if ($var instanceof Variable) {
+                    $name = $var->name;
+                    if ($name === 'this') {
+                        throw new Exception('cannot re-assign $this');
+                    }
                     $ret = $this->evaluate($stmt->expr);
-                    $this->variables[$var->name] = $ret;
+                    $this->variables[$name] = $ret;
                     return $ret;
                 }
                 break;

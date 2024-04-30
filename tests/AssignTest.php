@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Exception;
+
 class AssignTest extends TestCase
 {
     /**
@@ -45,5 +47,21 @@ class AssignTest extends TestCase
         CODE;
 
         $this->expectOutputStringWithCode('101010', $code);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAssignThis(): void
+    {
+        $code = <<<CODE
+        <?php
+        \$this = 1;
+        CODE;
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('cannot re-assign $this');
+
+        $this->interpreter->run($code);
     }
 }
