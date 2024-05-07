@@ -46,6 +46,7 @@ use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Nop;
@@ -282,6 +283,20 @@ class Interpreter
                 return $this->evaluate($stmt->value);
             case Return_::class:
                 return $this->evaluate($stmt->expr);
+            case Foreach_::class:
+                $array = $this->evaluate($stmt->expr);
+                foreach ($array as $key => $item) {
+                    if ($stmt->valueVar instanceof Variable) {
+                        $this->scope->set($stmt->valueVar->name, $item);
+                    }
+                    if ($stmt->keyVar instanceof Variable) {
+                        $this->scope->set($stmt->keyVar->name, $key);
+                    }
+                    foreach ($stmt->stmts as $expr) {
+                        $this->evaluate($expr);
+                    }
+                }
+                break;
         }
     }
 }
