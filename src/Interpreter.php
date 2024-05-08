@@ -51,6 +51,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\While_;
 use PhpParser\NodeDumper;
 use PhpParser\Parser;
 
@@ -294,6 +295,13 @@ class Interpreter
                     }
                     foreach ($stmt->stmts as $expr) {
                         $this->evaluate($expr);
+                    }
+                }
+                break;
+            case While_::class:
+                while ($this->evaluate($stmt->cond)) {
+                    foreach ($stmt->stmts as $node) {
+                        $this->evaluate($node);
                     }
                 }
                 break;
