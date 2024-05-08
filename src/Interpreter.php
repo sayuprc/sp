@@ -46,6 +46,7 @@ use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
@@ -302,6 +303,24 @@ class Interpreter
                 while ($this->evaluate($stmt->cond)) {
                     foreach ($stmt->stmts as $node) {
                         $this->evaluate($node);
+                    }
+                }
+                break;
+            case For_::class:
+                foreach ($stmt->init as $init) {
+                    $this->evaluate($init);
+                }
+                while (true) {
+                    foreach ($stmt->cond as $cond) {
+                        if (! $this->evaluate($cond)) {
+                            break 2;
+                        }
+                    }
+                    foreach ($stmt->stmts as $node) {
+                        $this->evaluate($node);
+                    }
+                    foreach ($stmt->loop as $loop) {
+                        $this->evaluate($loop);
                     }
                 }
                 break;
