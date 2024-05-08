@@ -42,6 +42,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
@@ -321,6 +322,16 @@ class Interpreter
                     }
                     foreach ($stmt->loop as $loop) {
                         $this->evaluate($loop);
+                    }
+                }
+                break;
+            case Do_::class:
+                foreach ($stmt->stmts as $node) {
+                    $this->evaluate($node);
+                }
+                while ($this->evaluate($stmt->cond)) {
+                    foreach ($stmt->stmts as $node) {
+                        $this->evaluate($node);
                     }
                 }
                 break;
