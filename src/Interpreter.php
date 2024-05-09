@@ -42,6 +42,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Break_;
+use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Else_;
@@ -189,7 +191,10 @@ class Interpreter
 
                 if ($ifResult) {
                     foreach ($stmt->stmts as $node) {
-                        $this->evaluate($node);
+                        $ret = $this->evaluate($node);
+                        if ($ret instanceof ContinueObject || $ret instanceof BreakObject) {
+                            return $ret;
+                        }
                     }
                 }
 
@@ -296,14 +301,30 @@ class Interpreter
                         $this->scope->set($stmt->keyVar->name, $key);
                     }
                     foreach ($stmt->stmts as $expr) {
-                        $this->evaluate($expr);
+                        $ret = $this->evaluate($expr);
+
+                        if ($ret instanceof BreakObject) {
+                            break 2;
+                        }
+
+                        if ($ret instanceof ContinueObject) {
+                            break;
+                        }
                     }
                 }
                 break;
             case While_::class:
                 while ($this->evaluate($stmt->cond)) {
                     foreach ($stmt->stmts as $node) {
-                        $this->evaluate($node);
+                        $ret = $this->evaluate($node);
+
+                        if ($ret instanceof BreakObject) {
+                            break 2;
+                        }
+
+                        if ($ret instanceof ContinueObject) {
+                            break;
+                        }
                     }
                 }
                 break;
@@ -318,7 +339,14 @@ class Interpreter
                         }
                     }
                     foreach ($stmt->stmts as $node) {
-                        $this->evaluate($node);
+                        $ret = $this->evaluate($node);
+                        if ($ret instanceof BreakObject) {
+                            break 2;
+                        }
+
+                        if ($ret instanceof ContinueObject) {
+                            break;
+                        }
                     }
                     foreach ($stmt->loop as $loop) {
                         $this->evaluate($loop);
@@ -326,15 +354,24 @@ class Interpreter
                 }
                 break;
             case Do_::class:
-                foreach ($stmt->stmts as $node) {
-                    $this->evaluate($node);
-                }
-                while ($this->evaluate($stmt->cond)) {
+                do {
                     foreach ($stmt->stmts as $node) {
-                        $this->evaluate($node);
+                        $ret = $this->evaluate($node);
+
+                        if ($ret instanceof BreakObject) {
+                            break 2;
+                        }
+
+                        if ($ret instanceof ContinueObject) {
+                            break;
+                        }
                     }
-                }
+                } while ($this->evaluate($stmt->cond));
                 break;
+            case Continue_::class:
+                return new ContinueObject();
+            case Break_::class:
+                return new BreakObject();
         }
     }
 }
