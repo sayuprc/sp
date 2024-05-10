@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Exception;
+
 class WhileTest extends TestCase
 {
     /**
@@ -41,6 +43,43 @@ class WhileTest extends TestCase
         CODE;
 
         $this->expectOutputStringWithCode('01', $code);
+    }
+
+    public function testBreakInNestedWhile(): void
+    {
+        $code = <<<'CODE'
+        <?php
+        $a = 0;
+        $b = 0;
+        while ($a < 10) {
+            echo $a;
+            while ($b < 10) {
+                echo $b;
+                if ($b === 2) {
+                    break 2;
+                }
+                $b = $b + 1;
+            }
+            $a = $a + 1;
+        }
+        CODE;
+
+        $this->expectOutputStringWithCode('0012', $code);
+    }
+
+    public function testInvalidBreakNum(): void
+    {
+        $code = <<<'CODE'
+        <?php
+        while (true) {
+            break 2;
+        }
+        CODE;
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('cannot break 2 levels');
+
+        $this->interpreter->run($code);
     }
 
     /**

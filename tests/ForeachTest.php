@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Exception;
+
 class ForeachTest extends TestCase
 {
     /**
@@ -52,6 +54,39 @@ class ForeachTest extends TestCase
         CODE;
 
         $this->expectOutputStringWithCode('a', $code);
+    }
+
+    public function testBreakInNestedForeach(): void
+    {
+        $code = <<<'CODE'
+        <?php
+        foreach ([1, 2, 3] as $a) {
+            echo $a;
+            foreach ([1, 2, 3] as $b) {
+                echo $b;
+                if ($b === 2) {
+                    break 2;
+                }
+            }
+        }
+        CODE;
+
+        $this->expectOutputStringWithCode('112', $code);
+    }
+
+    public function testInvalidBreakNum(): void
+    {
+        $code = <<<'CODE'
+        <?php
+        foreach ([1, 2, 3] as $a) {
+            break 2;
+        }
+        CODE;
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('cannot break 2 levels');
+
+        $this->interpreter->run($code);
     }
 
     /**

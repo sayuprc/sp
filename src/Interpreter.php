@@ -72,6 +72,11 @@ class Interpreter
     private array $functions;
 
     /**
+     * @var int<0, max>
+     */
+    private int $currentNest;
+
+    /**
      * @param Parser $parser
      * @param bool   $isDebug
      */
@@ -81,6 +86,7 @@ class Interpreter
     ) {
         $this->scope = new Scope();
         $this->functions = [];
+        $this->currentNest = 0;
     }
 
     /**
@@ -292,6 +298,7 @@ class Interpreter
             case Return_::class:
                 return $this->evaluate($stmt->expr);
             case Foreach_::class:
+                $this->currentNest += 1;
                 $array = $this->evaluate($stmt->expr);
                 foreach ($array as $key => $item) {
                     if ($stmt->valueVar instanceof Variable) {
@@ -304,6 +311,10 @@ class Interpreter
                         $ret = $this->evaluate($expr);
 
                         if ($ret instanceof BreakObject) {
+                            if (1 < $ret->num()) {
+                                $ret->decrement();
+                                return $ret;
+                            }
                             break 2;
                         }
 
@@ -312,13 +323,19 @@ class Interpreter
                         }
                     }
                 }
+                $this->currentNest = 0;
                 break;
             case While_::class:
+                $this->currentNest += 1;
                 while ($this->evaluate($stmt->cond)) {
                     foreach ($stmt->stmts as $node) {
                         $ret = $this->evaluate($node);
 
                         if ($ret instanceof BreakObject) {
+                            if (1 < $ret->num()) {
+                                $ret->decrement();
+                                return $ret;
+                            }
                             break 2;
                         }
 
@@ -327,8 +344,10 @@ class Interpreter
                         }
                     }
                 }
+                $this->currentNest = 0;
                 break;
             case For_::class:
+                $this->currentNest += 1;
                 foreach ($stmt->init as $init) {
                     $this->evaluate($init);
                 }
@@ -341,6 +360,10 @@ class Interpreter
                     foreach ($stmt->stmts as $node) {
                         $ret = $this->evaluate($node);
                         if ($ret instanceof BreakObject) {
+                            if (1 < $ret->num()) {
+                                $ret->decrement();
+                                return $ret;
+                            }
                             break 2;
                         }
 
@@ -352,13 +375,19 @@ class Interpreter
                         $this->evaluate($loop);
                     }
                 }
+                $this->currentNest = 0;
                 break;
             case Do_::class:
+                $this->currentNest += 1;
                 do {
                     foreach ($stmt->stmts as $node) {
                         $ret = $this->evaluate($node);
 
                         if ($ret instanceof BreakObject) {
+                            if (1 < $ret->num()) {
+                                $ret->decrement();
+                                return $ret;
+                            }
                             break 2;
                         }
 
@@ -367,11 +396,16 @@ class Interpreter
                         }
                     }
                 } while ($this->evaluate($stmt->cond));
+                $this->currentNest = 0;
                 break;
             case Continue_::class:
                 return new ContinueObject();
             case Break_::class:
-                return new BreakObject();
+                $breakNum = is_null($stmt->num) ? 1 : $this->evaluate($stmt->num);
+                if ($this->currentNest < $breakNum) {
+                    throw new Exception("cannot break {$breakNum} levels");
+                }
+                return new BreakObject($breakNum);
         }
     }
 }
