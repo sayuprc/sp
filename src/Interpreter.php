@@ -42,14 +42,20 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Break_;
+use PhpParser\Node\Stmt\Continue_;
+use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\For_;
+use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\While_;
 use PhpParser\NodeDumper;
 use PhpParser\Parser;
 
@@ -66,6 +72,11 @@ class Interpreter
     private array $functions;
 
     /**
+     * @var int<0, max>
+     */
+    private int $currentNest;
+
+    /**
      * @param Parser $parser
      * @param bool   $isDebug
      */
@@ -75,6 +86,7 @@ class Interpreter
     ) {
         $this->scope = new Scope();
         $this->functions = [];
+        $this->currentNest = 0;
     }
 
     /**
@@ -185,7 +197,10 @@ class Interpreter
 
                 if ($ifResult) {
                     foreach ($stmt->stmts as $node) {
-                        $this->evaluate($node);
+                        $ret = $this->evaluate($node);
+                        if ($ret instanceof ContinueObject || $ret instanceof BreakObject) {
+                            return $ret;
+                        }
                     }
                 }
 
@@ -282,6 +297,115 @@ class Interpreter
                 return $this->evaluate($stmt->value);
             case Return_::class:
                 return $this->evaluate($stmt->expr);
+            case Foreach_::class:
+                $this->currentNest += 1;
+                $array = $this->evaluate($stmt->expr);
+                foreach ($array as $key => $item) {
+                    if ($stmt->valueVar instanceof Variable) {
+                        $this->scope->set($stmt->valueVar->name, $item);
+                    }
+                    if ($stmt->keyVar instanceof Variable) {
+                        $this->scope->set($stmt->keyVar->name, $key);
+                    }
+                    foreach ($stmt->stmts as $expr) {
+                        $ret = $this->evaluate($expr);
+
+                        if ($ret instanceof BreakObject) {
+                            if (1 < $ret->num()) {
+                                $ret->decrement();
+                                return $ret;
+                            }
+                            break 2;
+                        }
+
+                        if ($ret instanceof ContinueObject) {
+                            break;
+                        }
+                    }
+                }
+                $this->currentNest = 0;
+                break;
+            case While_::class:
+                $this->currentNest += 1;
+                while ($this->evaluate($stmt->cond)) {
+                    foreach ($stmt->stmts as $node) {
+                        $ret = $this->evaluate($node);
+
+                        if ($ret instanceof BreakObject) {
+                            if (1 < $ret->num()) {
+                                $ret->decrement();
+                                return $ret;
+                            }
+                            break 2;
+                        }
+
+                        if ($ret instanceof ContinueObject) {
+                            break;
+                        }
+                    }
+                }
+                $this->currentNest = 0;
+                break;
+            case For_::class:
+                $this->currentNest += 1;
+                foreach ($stmt->init as $init) {
+                    $this->evaluate($init);
+                }
+                while (true) {
+                    foreach ($stmt->cond as $cond) {
+                        if (! $this->evaluate($cond)) {
+                            break 2;
+                        }
+                    }
+                    foreach ($stmt->stmts as $node) {
+                        $ret = $this->evaluate($node);
+                        if ($ret instanceof BreakObject) {
+                            if (1 < $ret->num()) {
+                                $ret->decrement();
+                                return $ret;
+                            }
+                            break 2;
+                        }
+
+                        if ($ret instanceof ContinueObject) {
+                            break;
+                        }
+                    }
+                    foreach ($stmt->loop as $loop) {
+                        $this->evaluate($loop);
+                    }
+                }
+                $this->currentNest = 0;
+                break;
+            case Do_::class:
+                $this->currentNest += 1;
+                do {
+                    foreach ($stmt->stmts as $node) {
+                        $ret = $this->evaluate($node);
+
+                        if ($ret instanceof BreakObject) {
+                            if (1 < $ret->num()) {
+                                $ret->decrement();
+                                return $ret;
+                            }
+                            break 2;
+                        }
+
+                        if ($ret instanceof ContinueObject) {
+                            break;
+                        }
+                    }
+                } while ($this->evaluate($stmt->cond));
+                $this->currentNest = 0;
+                break;
+            case Continue_::class:
+                return new ContinueObject();
+            case Break_::class:
+                $breakNum = is_null($stmt->num) ? 1 : $this->evaluate($stmt->num);
+                if ($this->currentNest < $breakNum) {
+                    throw new Exception("cannot break {$breakNum} levels");
+                }
+                return new BreakObject($breakNum);
         }
     }
 }
