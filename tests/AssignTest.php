@@ -13,10 +13,10 @@ class AssignTest extends TestCase
      */
     public function testAssign(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
-        \$var = 'a';
-        echo \$var;
+        $var = 'a';
+        echo $var;
         CODE;
 
         $this->expectOutputStringWithCode('a', $code);
@@ -27,9 +27,9 @@ class AssignTest extends TestCase
      */
     public function testNotAssign(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
-        echo \$var;
+        echo $var;
         CODE;
 
         $this->expectOutputStringWithCode('', $code);
@@ -40,10 +40,10 @@ class AssignTest extends TestCase
      */
     public function testMultipleAssign(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
-        \$foo = \$bar = \$baz = 10;
-        echo \$foo, \$bar, \$baz;
+        $foo = $bar = $baz = 10;
+        echo $foo, $bar, $baz;
         CODE;
 
         $this->expectOutputStringWithCode('101010', $code);
@@ -54,9 +54,9 @@ class AssignTest extends TestCase
      */
     public function testAssignThis(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
-        \$this = 1;
+        $this = 1;
         CODE;
 
         $this->expectException(Exception::class);

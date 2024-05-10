@@ -13,10 +13,10 @@ class ForTest extends TestCase
      */
     public function testFor(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
-        for (\$i = 0; \$i < 10; \$i = \$i + 1) {
-            echo \$i;
+        for ($i = 0; $i < 10; $i = $i + 1) {
+            echo $i;
         }
         CODE;
 
@@ -28,13 +28,13 @@ class ForTest extends TestCase
      */
     public function testForWithBreak(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
-        for (\$i = 0; \$i < 10; \$i = \$i + 1) {
-            if (\$i === 2) {
+        for ($i = 0; $i < 10; $i = $i + 1) {
+            if ($i === 2) {
                 break;
             }
-            echo \$i;
+            echo $i;
         }
         CODE;
 
@@ -79,13 +79,13 @@ class ForTest extends TestCase
      */
     public function testForWithContinue(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
-        for (\$i = 0; \$i < 10; \$i = \$i + 1) {
-            if (\$i === 2) {
+        for ($i = 0; $i < 10; $i = $i + 1) {
+            if ($i === 2) {
                 continue;
             }
-            echo \$i;
+            echo $i;
         }
         CODE;
 

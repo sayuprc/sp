@@ -11,7 +11,7 @@ class BinaryOpTest extends TestCase
      */
     public function testPlus(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 + 1;
         CODE;
@@ -24,7 +24,7 @@ class BinaryOpTest extends TestCase
      */
     public function testMinus(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 2 - 1;
         CODE;
@@ -37,7 +37,7 @@ class BinaryOpTest extends TestCase
      */
     public function testMul(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 2 * 2;
         CODE;
@@ -50,7 +50,7 @@ class BinaryOpTest extends TestCase
      */
     public function testDiv(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 6 / 2;
         CODE;
@@ -63,7 +63,7 @@ class BinaryOpTest extends TestCase
      */
     public function testMod(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 5 % 3;
         CODE;
@@ -76,7 +76,7 @@ class BinaryOpTest extends TestCase
      */
     public function testPow(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 3 ** 2;
         CODE;
@@ -89,7 +89,7 @@ class BinaryOpTest extends TestCase
      */
     public function testConcat(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 . 2;
         CODE;
@@ -102,7 +102,7 @@ class BinaryOpTest extends TestCase
      */
     public function testSmallerIsTrue(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 < 2;
         CODE;
@@ -115,7 +115,7 @@ class BinaryOpTest extends TestCase
      */
     public function testSmallerIsFalse(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 2 < 1;
         CODE;
@@ -128,7 +128,7 @@ class BinaryOpTest extends TestCase
      */
     public function testSmallerOrEqualIsTrue(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 <= 2;
         CODE;
@@ -141,7 +141,7 @@ class BinaryOpTest extends TestCase
      */
     public function testSmallerOrEqualIsFalse(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 2 <= 1;
         CODE;
@@ -154,7 +154,7 @@ class BinaryOpTest extends TestCase
      */
     public function testGreaterIsTrue(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 2 > 1;
         CODE;
@@ -167,7 +167,7 @@ class BinaryOpTest extends TestCase
      */
     public function testGreaterIsFalse(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 > 2;
         CODE;
@@ -180,7 +180,7 @@ class BinaryOpTest extends TestCase
      */
     public function testGreaterOrEqualIsTrue(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 2 >= 1;
         CODE;
@@ -193,7 +193,7 @@ class BinaryOpTest extends TestCase
      */
     public function testGreaterOrEqualIsFalse(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 >= 2;
         CODE;
@@ -206,7 +206,7 @@ class BinaryOpTest extends TestCase
      */
     public function testSpaceshipIsSmaller(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 <=> 2;
         CODE;
@@ -219,7 +219,7 @@ class BinaryOpTest extends TestCase
      */
     public function testSpaceshipIsEqual(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 <=> 1;
         CODE;
@@ -232,7 +232,7 @@ class BinaryOpTest extends TestCase
      */
     public function testSpaceshipIsGreater(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 2 <=> 1;
         CODE;
@@ -245,7 +245,7 @@ class BinaryOpTest extends TestCase
      */
     public function testEqualSameType(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 == 1;
         CODE;
@@ -258,7 +258,7 @@ class BinaryOpTest extends TestCase
      */
     public function testNotEqualSameType(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 != 0;
         CODE;
@@ -271,7 +271,7 @@ class BinaryOpTest extends TestCase
      */
     public function testEqualNotSameType(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 == '1';
         CODE;
@@ -284,7 +284,7 @@ class BinaryOpTest extends TestCase
      */
     public function testNotEqualNotSameType(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 != '0';
         CODE;
@@ -297,7 +297,7 @@ class BinaryOpTest extends TestCase
      */
     public function testIdenticalSameType(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 === 1;
         CODE;
@@ -310,7 +310,7 @@ class BinaryOpTest extends TestCase
      */
     public function testNotIdenticalSameType(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 !== 0;
         CODE;
@@ -323,7 +323,7 @@ class BinaryOpTest extends TestCase
      */
     public function testIdenticalNotSameType(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 === '1';
         CODE;
@@ -336,7 +336,7 @@ class BinaryOpTest extends TestCase
      */
     public function testNotIdenticalNotSameType(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 !== '1';
         CODE;
@@ -349,7 +349,7 @@ class BinaryOpTest extends TestCase
      */
     public function testBooleanAndIsTrue(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 && 1;
         CODE;
@@ -362,7 +362,7 @@ class BinaryOpTest extends TestCase
      */
     public function testBooleanAndIsFalse(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 && 0;
         CODE;
@@ -375,7 +375,7 @@ class BinaryOpTest extends TestCase
      */
     public function testBooleanOrIsTrue(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 || 0;
         CODE;
@@ -388,7 +388,7 @@ class BinaryOpTest extends TestCase
      */
     public function testBooleanOrIsFalse(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 0 || 0;
         CODE;
@@ -401,7 +401,7 @@ class BinaryOpTest extends TestCase
      */
     public function testLogicalAndIsTrue(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 and 1;
         CODE;
@@ -414,7 +414,7 @@ class BinaryOpTest extends TestCase
      */
     public function testLogicalAndIsFalse(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 and 0;
         CODE;
@@ -427,7 +427,7 @@ class BinaryOpTest extends TestCase
      */
     public function testLogicalOrIsTrue(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 or 0;
         CODE;
@@ -440,7 +440,7 @@ class BinaryOpTest extends TestCase
      */
     public function testLogicalOrIsFalse(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 0 or 0;
         CODE;
@@ -455,7 +455,7 @@ class BinaryOpTest extends TestCase
      */
     public function testLogicalXorIsTrue(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 xor 0;
         CODE;
@@ -470,7 +470,7 @@ class BinaryOpTest extends TestCase
      */
     public function testLogicalXorIsFalse(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 xor 1;
         CODE;
@@ -485,7 +485,7 @@ class BinaryOpTest extends TestCase
      */
     public function testCoalesce(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo null ?? 1;
         CODE;
@@ -498,7 +498,7 @@ class BinaryOpTest extends TestCase
      */
     public function testShiftLeft(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 11 << 2;
         CODE;
@@ -514,7 +514,7 @@ class BinaryOpTest extends TestCase
      */
     public function testShiftRight(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 10 >> 2;
         CODE;
@@ -530,7 +530,7 @@ class BinaryOpTest extends TestCase
      */
     public function testBitwiseAnd(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 & 2;
         CODE;
@@ -547,7 +547,7 @@ class BinaryOpTest extends TestCase
      */
     public function testBitwiseOr(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 | 2;
         CODE;
@@ -564,7 +564,7 @@ class BinaryOpTest extends TestCase
      */
     public function testBitwiseXor(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1 ^ 3;
         CODE;

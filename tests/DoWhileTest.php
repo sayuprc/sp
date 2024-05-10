@@ -13,12 +13,12 @@ class DoWhileTest extends TestCase
      */
     public function testDoWhile(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
-        \$i = 0;
+        $i = 0;
         do {
-            echo \$i;
-        } while (\$i > 0);
+            echo $i;
+        } while ($i > 0);
         CODE;
 
         $this->expectOutputStringWithCode('0', $code);

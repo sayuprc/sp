@@ -11,7 +11,7 @@ class EchoTest extends TestCase
      */
     public function testEchoString(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 'a';
         CODE;
@@ -24,7 +24,7 @@ class EchoTest extends TestCase
      */
     public function testEchoInt(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1;
         CODE;
@@ -37,7 +37,7 @@ class EchoTest extends TestCase
      */
     public function testEchoFloat(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 1.1;
         CODE;
@@ -50,7 +50,7 @@ class EchoTest extends TestCase
      */
     public function testEchoMultiElements(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo 'a', 'b';
         CODE;

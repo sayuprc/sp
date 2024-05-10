@@ -13,12 +13,12 @@ class WhileTest extends TestCase
      */
     public function testWhile(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
-        \$i = 0;
-        while (\$i < 10) {
-            echo \$i;
-            \$i = \$i + 1;
+        $i = 0;
+        while ($i < 10) {
+            echo $i;
+            $i = $i + 1;
         }
         CODE;
 
@@ -30,15 +30,15 @@ class WhileTest extends TestCase
      */
     public function testWhileBreak(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
-        \$i = 0;
-        while (\$i < 10) {
-            if (\$i === 2) {
+        $i = 0;
+        while ($i < 10) {
+            if ($i === 2) {
                 break;
             }
-            echo \$i;
-            \$i = \$i + 1;
+            echo $i;
+            $i = $i + 1;
         }
         CODE;
 
@@ -87,16 +87,16 @@ class WhileTest extends TestCase
      */
     public function testWhileContinue(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
-        \$i = 0;
-        while (\$i < 10) {
-            if (\$i === 2) {
-                \$i = \$i + 1;
+        $i = 0;
+        while ($i < 10) {
+            if ($i === 2) {
+                $i = $i + 1;
                 continue;
             }
-            echo \$i;
-            \$i = \$i + 1;
+            echo $i;
+            $i = $i + 1;
         }
         CODE;
 

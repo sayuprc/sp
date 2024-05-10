@@ -13,10 +13,10 @@ class ForeachTest extends TestCase
      */
     public function testForeach(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
-        foreach (['a', 'b', 'c'] as \$item) {
-            echo \$item;
+        foreach (['a', 'b', 'c'] as $item) {
+            echo $item;
         }
         CODE;
 
@@ -28,10 +28,10 @@ class ForeachTest extends TestCase
      */
     public function testForeachWithKey(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
-        foreach (['a', 'b', 'c'] as \$key => \$item) {
-            echo \$key . '=>' . \$item;
+        foreach (['a', 'b', 'c'] as $key => $item) {
+            echo $key . '=>' . $item;
         }
         CODE;
 
@@ -43,13 +43,13 @@ class ForeachTest extends TestCase
      */
     public function testForeachWithBreak(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
-        foreach (['a', 'b', 'c'] as \$item) {
-            if (\$item === 'b') {
+        foreach (['a', 'b', 'c'] as $item) {
+            if ($item === 'b') {
                 break;
             }
-            echo \$item;
+            echo $item;
         }
         CODE;
 
@@ -94,13 +94,13 @@ class ForeachTest extends TestCase
      */
     public function testForeachWithContinue(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
-        foreach (['a', 'b', 'c'] as \$item) {
-            if (\$item === 'b') {
+        foreach (['a', 'b', 'c'] as $item) {
+            if ($item === 'b') {
                 continue;
             }
-            echo \$item;
+            echo $item;
         }
         CODE;
 

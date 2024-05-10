@@ -11,7 +11,7 @@ class IfTest extends TestCase
      */
     public function testIf(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
 		<?php
 		if (0 < 1) {
 			echo 1;
@@ -26,7 +26,7 @@ class IfTest extends TestCase
      */
     public function testIfElseIf(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
 		<?php
 		if (1 < 0) {
 			echo 1;
@@ -43,7 +43,7 @@ class IfTest extends TestCase
      */
     public function testIfElse(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
 		<?php
 		if (1 < 0) {
 			echo 1;
@@ -60,7 +60,7 @@ class IfTest extends TestCase
      */
     public function testNestedIf(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
 		<?php
 		if (0 < 1) {
 			if (1 < 2) {
@@ -77,7 +77,7 @@ class IfTest extends TestCase
      */
     public function testNestedElseIf(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
 		<?php
 		if (0 < 1) {
 			if (2 < 1) {
@@ -96,7 +96,7 @@ class IfTest extends TestCase
      */
     public function testNestedElse(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
 		<?php
 		if (0 < 1) {
 			if (2 < 1) {
@@ -115,7 +115,7 @@ class IfTest extends TestCase
      */
     public function testAllTrue(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
 		<?php
 		if (0 < 1) {
 			echo 'a';
