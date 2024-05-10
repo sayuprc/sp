@@ -10,35 +10,49 @@ use PhpParser\ParserFactory;
 foreach ([__DIR__ . '/../../../autoload.php', __DIR__ . '/../vendor/autoload.php'] as $file) {
     if (file_exists($file)) {
         require $file;
-
         break;
     }
 }
 
-$index = null;
-$options = getopt('r', ['debug'], $index);
-$args = array_slice($argv, (int)$index);
+['args' => $args, 'options' => $options] = parseArgs($argv);
 $input = $args[0] ?? '';
 
-$isDebug = match (true) {
-    isset($options['debug']) => true,
-    default => false,
-};
+$isDebug = isset($options['debug']);
 $isDirectExecution = isset($options['r']);
 
-if ($isDirectExecution) {
-    $lines = ['<?php', $input];
-} else {
+if (! $isDirectExecution) {
+    if (! file_exists($input)) {
+        echo "File not found: {$input}", PHP_EOL;
+        exit;
+    }
     $lines = file($input);
+} else {
+    $lines = ['<?php', $input];
 }
 
-$parser = (new ParserFactory())->createForVersion(PhpVersion::fromString('8.2'));
+$phpVersion = '8.2';
+$parser = (new ParserFactory())->createForVersion(PhpVersion::fromString($phpVersion));
 
 try {
-    $interpreter = new Interpreter($parser, $isDebug);
-
     $code = implode(PHP_EOL, $lines);
-    $interpreter->run($code);
+
+    (new Interpreter($parser, $isDebug))->run($code);
+} catch (Exception $exception) {
+    echo "Parse error: {$exception->getMessage()}", PHP_EOL;
 } catch (Error $error) {
-    echo "Parse error: {$error->getMessage()}", PHP_EOL;
+    echo "Fatal error: {$error->getMessage()}", PHP_EOL;
+}
+
+/**
+ * @param array<string> $argv
+ *
+ * @return array{args: array<string>, options: array<string>}
+ */
+function parseArgs(array $argv): array
+{
+    $optionIndex = null;
+    $options = getopt('r', ['debug'], $optionIndex);
+    $args = array_slice($argv, (int)$optionIndex);
+
+    return compact('args', 'options');
 }
