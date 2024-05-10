@@ -11,7 +11,7 @@ class FunctionTest extends TestCase
      */
     public function testFunction(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         function func()
         {
@@ -29,11 +29,11 @@ class FunctionTest extends TestCase
      */
     public function testFunctionNotReturn(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         function func()
         {
-            \$a = 1 + 1;
+            $a = 1 + 1;
         }
 
         echo func();
@@ -47,11 +47,11 @@ class FunctionTest extends TestCase
      */
     public function testFunctionWithArg(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
-        function func(\$arg)
+        function func($arg)
         {
-            return \$arg + 1;
+            return $arg + 1;
         }
 
         echo func(1);
@@ -65,14 +65,14 @@ class FunctionTest extends TestCase
      */
     public function testCallVariableWithoutFunctionScope(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         function func()
         {
-            return \$arg;
+            return $arg;
         }
 
-        \$arg = 1;
+        $arg = 1;
 
         echo func();
         CODE;

@@ -11,7 +11,7 @@ class ConstFetchTest extends TestCase
      */
     public function testTrue(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo true;
         CODE;
@@ -24,7 +24,7 @@ class ConstFetchTest extends TestCase
      */
     public function testFalse(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo false;
         CODE;
@@ -37,7 +37,7 @@ class ConstFetchTest extends TestCase
      */
     public function testNull(): void
     {
-        $code = <<<CODE
+        $code = <<<'CODE'
         <?php
         echo null;
         CODE;
