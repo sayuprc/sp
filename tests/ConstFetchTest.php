@@ -6,9 +6,6 @@ namespace Tests;
 
 class ConstFetchTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testTrue(): void
     {
         $code = <<<'CODE'
@@ -19,9 +16,6 @@ class ConstFetchTest extends TestCase
         $this->expectOutputStringWithCode('1', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testFalse(): void
     {
         $code = <<<'CODE'
@@ -32,9 +26,6 @@ class ConstFetchTest extends TestCase
         $this->expectOutputStringWithCode('', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testNull(): void
     {
         $code = <<<'CODE'

@@ -8,9 +8,6 @@ use Exception;
 
 class WhileTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testWhile(): void
     {
         $code = <<<'CODE'
@@ -25,9 +22,6 @@ class WhileTest extends TestCase
         $this->expectOutputStringWithCode('0123456789', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testWhileBreak(): void
     {
         $code = <<<'CODE'
@@ -82,9 +76,6 @@ class WhileTest extends TestCase
         $this->interpreter->run($code);
     }
 
-    /**
-     * @return void
-     */
     public function testWhileContinue(): void
     {
         $code = <<<'CODE'

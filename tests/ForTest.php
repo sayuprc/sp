@@ -8,9 +8,6 @@ use Exception;
 
 class ForTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testFor(): void
     {
         $code = <<<'CODE'
@@ -23,9 +20,6 @@ class ForTest extends TestCase
         $this->expectOutputStringWithCode('0123456789', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testForWithBreak(): void
     {
         $code = <<<'CODE'
@@ -74,9 +68,6 @@ class ForTest extends TestCase
         $this->interpreter->run($code);
     }
 
-    /**
-     * @return void
-     */
     public function testForWithContinue(): void
     {
         $code = <<<'CODE'

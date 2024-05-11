@@ -6,9 +6,6 @@ namespace Tests;
 
 class FunctionTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testFunction(): void
     {
         $code = <<<'CODE'
@@ -24,9 +21,6 @@ class FunctionTest extends TestCase
         $this->expectOutputStringWithCode('2', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testFunctionNotReturn(): void
     {
         $code = <<<'CODE'
@@ -42,9 +36,6 @@ class FunctionTest extends TestCase
         $this->expectOutputStringWithCode('', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testFunctionWithArg(): void
     {
         $code = <<<'CODE'
@@ -60,9 +51,6 @@ class FunctionTest extends TestCase
         $this->expectOutputStringWithCode('2', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testCallVariableWithoutFunctionScope(): void
     {
         $code = <<<'CODE'

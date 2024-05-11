@@ -6,9 +6,6 @@ namespace Tests;
 
 class ArrayTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testArray(): void
     {
         $code = <<<'CODE'
@@ -24,9 +21,6 @@ class ArrayTest extends TestCase
         $this->expectOutputStringWithCode('foobuz', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testArrayWithKey(): void
     {
         $code = <<<'CODE'
