@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace StrictPhp;
 
+use Error;
 use Exception;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
@@ -38,6 +39,7 @@ use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\BinaryOp\Spaceship;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
@@ -435,6 +437,19 @@ class Interpreter
                 }
                 $this->currentNest = 0;
                 break;
+            case Match_::class:
+                $cond = $this->evaluate($stmt->cond);
+                foreach ($stmt->arms as $arm) {
+                    if (is_null($arm->conds)) {
+                        return $this->evaluate($arm->body);
+                    }
+                    foreach ($arm->conds as $armCond) {
+                        if ($cond === $this->evaluate($armCond)) {
+                            return $this->evaluate($arm->body);
+                        }
+                    }
+                }
+                throw new Error("Unhandled match case {$cond}");
         }
     }
 }
