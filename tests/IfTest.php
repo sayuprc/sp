@@ -6,9 +6,6 @@ namespace Tests;
 
 class IfTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testIf(): void
     {
         $code = <<<'CODE'
@@ -21,9 +18,6 @@ class IfTest extends TestCase
         $this->expectOutputStringWithCode('1', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testIfElseIf(): void
     {
         $code = <<<'CODE'
@@ -38,9 +32,6 @@ class IfTest extends TestCase
         $this->expectOutputStringWithCode('0', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testIfElse(): void
     {
         $code = <<<'CODE'
@@ -55,9 +46,6 @@ class IfTest extends TestCase
         $this->expectOutputStringWithCode('0', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testNestedIf(): void
     {
         $code = <<<'CODE'
@@ -72,9 +60,6 @@ class IfTest extends TestCase
         $this->expectOutputStringWithCode('1', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testNestedElseIf(): void
     {
         $code = <<<'CODE'
@@ -91,9 +76,6 @@ class IfTest extends TestCase
         $this->expectOutputStringWithCode('0', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testNestedElse(): void
     {
         $code = <<<'CODE'
@@ -110,9 +92,6 @@ class IfTest extends TestCase
         $this->expectOutputStringWithCode('0', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testAllTrue(): void
     {
         $code = <<<'CODE'

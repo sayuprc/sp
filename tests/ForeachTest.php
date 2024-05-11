@@ -8,9 +8,6 @@ use Exception;
 
 class ForeachTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testForeach(): void
     {
         $code = <<<'CODE'
@@ -23,9 +20,6 @@ class ForeachTest extends TestCase
         $this->expectOutputStringWithCode('abc', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testForeachWithKey(): void
     {
         $code = <<<'CODE'
@@ -38,9 +32,6 @@ class ForeachTest extends TestCase
         $this->expectOutputStringWithCode('0=>a1=>b2=>c', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testForeachWithBreak(): void
     {
         $code = <<<'CODE'
@@ -89,9 +80,6 @@ class ForeachTest extends TestCase
         $this->interpreter->run($code);
     }
 
-    /**
-     * @return void
-     */
     public function testForeachWithContinue(): void
     {
         $code = <<<'CODE'

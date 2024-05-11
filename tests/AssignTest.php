@@ -8,9 +8,6 @@ use Exception;
 
 class AssignTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testAssign(): void
     {
         $code = <<<'CODE'
@@ -22,9 +19,6 @@ class AssignTest extends TestCase
         $this->expectOutputStringWithCode('a', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testNotAssign(): void
     {
         $code = <<<'CODE'
@@ -35,9 +29,6 @@ class AssignTest extends TestCase
         $this->expectOutputStringWithCode('', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testMultipleAssign(): void
     {
         $code = <<<'CODE'
@@ -49,9 +40,6 @@ class AssignTest extends TestCase
         $this->expectOutputStringWithCode('101010', $code);
     }
 
-    /**
-     * @return void
-     */
     public function testAssignThis(): void
     {
         $code = <<<'CODE'

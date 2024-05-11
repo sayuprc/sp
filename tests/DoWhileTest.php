@@ -8,9 +8,6 @@ use Exception;
 
 class DoWhileTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testDoWhile(): void
     {
         $code = <<<'CODE'

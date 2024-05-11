@@ -11,14 +11,8 @@ use StrictPhp\Interpreter;
 
 class TestCase extends BaseTestCase
 {
-    /**
-     * @var Interpreter
-     */
     protected Interpreter $interpreter;
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -29,10 +23,7 @@ class TestCase extends BaseTestCase
     }
 
     /**
-     * @param string $expected
-     * @param string $code
-     *
-     * @return void
+     * @param non-empty-string $code
      */
     protected function expectOutputStringWithCode(string $expected, string $code): void
     {
