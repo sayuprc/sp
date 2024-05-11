@@ -39,6 +39,7 @@ use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\BinaryOp\Spaceship;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Float_;
@@ -80,6 +81,11 @@ class Interpreter
     private int $currentNest;
 
     /**
+     * @var array<non-empty-string>
+     */
+    private array $includes;
+
+    /**
      * @param Parser $parser
      * @param bool   $isDebug
      */
@@ -90,6 +96,7 @@ class Interpreter
         $this->scope = new Scope();
         $this->functions = [];
         $this->currentNest = 0;
+        $this->includes = [];
     }
 
     /**
@@ -450,6 +457,30 @@ class Interpreter
                     }
                 }
                 throw new Error("Unhandled match case {$cond}");
+            case Include_::class:
+                $file = $this->evaluate($stmt->expr);
+                $isRequired = match ($stmt->type) {
+                    Include_::TYPE_REQUIRE, Include_::TYPE_REQUIRE_ONCE => true,
+                    default => false,
+                };
+                $isOnce = match ($stmt->type) {
+                    Include_::TYPE_INCLUDE_ONCE, Include_::TYPE_REQUIRE_ONCE => true,
+                    default => false,
+                };
+                if (! file_exists($file)) {
+                    if ($isRequired) {
+                        throw new Error("Failed opening required '{$file}'");
+                    }
+                    break;
+                }
+                if (! $isOnce || ! in_array($file, $this->includes, true)) {
+                    $code = file_get_contents($file);
+                    $this->run($code);
+                }
+                if ($isOnce) {
+                    $this->includes[] = $file;
+                }
+                break;
         }
     }
 }
