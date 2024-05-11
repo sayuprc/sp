@@ -55,6 +55,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\While_;
 use PhpParser\NodeDumper;
 use PhpParser\Parser;
@@ -406,6 +407,34 @@ class Interpreter
                     throw new Exception("cannot break {$breakNum} levels");
                 }
                 return new BreakObject($breakNum);
+            case Switch_::class:
+                $this->currentNest += 1;
+                $cond = $this->evaluate($stmt->cond);
+                $isMatched = false;
+                foreach ($stmt->cases as $case) {
+                    if (is_null($case->cond)) {
+                        foreach ($case->stmts as $node) {
+                            $this->evaluate($node);
+                        }
+                        break;
+                    } elseif ($cond == $this->evaluate($case->cond) || $isMatched) {
+                        $isMatched = true;
+
+                        foreach ($case->stmts as $node) {
+                            $ret = $this->evaluate($node);
+
+                            if ($ret instanceof BreakObject) {
+                                if (1 < $ret->num()) {
+                                    $ret->decrement();
+                                    return $ret;
+                                }
+                                break 2;
+                            }
+                        }
+                    }
+                }
+                $this->currentNest = 0;
+                break;
         }
     }
 }
