@@ -276,6 +276,9 @@ class Interpreter
                 throw new Exception("unknown index: {$key} in array");
             case Function_::class:
                 $name = $stmt->name->toString();
+                if (function_exists($name)) {
+                    throw new Error("Cannot redeclare {$name}()");
+                }
                 $this->functions[$name] = [
                     'params' => $stmt->params,
                     'stmts' => $stmt->stmts,
@@ -283,7 +286,13 @@ class Interpreter
                 break;
             case FuncCall::class:
                 $name = $stmt->name->toString();
-                if (array_key_exists($name, $this->functions)) {
+                if (function_exists($name)) {
+                    $args = [];
+                    foreach ($stmt->args as $arg) {
+                        $args[] = $this->evaluate($arg);
+                    }
+                    return $name(...$args);
+                } elseif (array_key_exists($name, $this->functions)) {
                     $function = $this->functions[$name];
                     $args = [];
                     foreach ($stmt->args as $arg) {

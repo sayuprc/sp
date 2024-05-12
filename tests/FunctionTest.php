@@ -101,4 +101,28 @@ class FunctionTest extends TestCase
         $this->expectExceptionMessage('Uncaught ArgumentCountError: Too few arguments to function func()');
         $this->interpreter->run($code);
     }
+
+    public function testCallBuiltInFunction(): void
+    {
+        $code = <<<'CODE'
+        <?php
+        echo in_array(1, [1, 2, 3], true);
+        CODE;
+
+        $this->expectOutputStringWithCode('1', $code);
+    }
+
+    public function testDeclareBuiltInFunction(): void
+    {
+        $code = <<<'CODE'
+        <?php
+        function in_array()
+        {
+        }
+        CODE;
+
+        $this->expectException(Error::class);
+        $this->expectExceptionMessage('Cannot redeclare in_array()');
+        $this->interpreter->run($code);
+    }
 }
