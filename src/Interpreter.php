@@ -290,7 +290,12 @@ class Interpreter
                     }
                     $functionScope = new Scope();
                     foreach ($function['params'] as $key => $param) {
-                        $functionScope->set($param->var->name, $args[$key]);
+                        $arg = match (true) {
+                            isset($args[$key]) => $args[$key],
+                            ! isset($args[$key]) && ! is_null($param->default) => $this->evaluate($param->default),
+                            default => throw new Error("Uncaught ArgumentCountError: Too few arguments to function {$name}()"),
+                        };
+                        $functionScope->set($param->var->name, $arg);
                     }
                     $beforeScope = $this->scope;
                     $this->scope = $functionScope;
