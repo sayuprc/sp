@@ -40,6 +40,7 @@ use PhpParser\Node\Expr\BinaryOp\Spaceship;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Include_;
+use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Float_;
@@ -486,6 +487,13 @@ class Interpreter
                     $this->includes[] = $file;
                 }
                 break;
+            case Isset_::class:
+                foreach ($stmt->vars as $var) {
+                    if (is_null($this->evaluate($var))) {
+                        return false;
+                    }
+                }
+                return true;
         }
     }
 }
