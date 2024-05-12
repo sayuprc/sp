@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Error;
+
 class FunctionTest extends TestCase
 {
     public function testFunction(): void
@@ -66,5 +68,37 @@ class FunctionTest extends TestCase
         CODE;
 
         $this->expectOutputStringWithCode('', $code);
+    }
+
+    public function testWithDefaultValue(): void
+    {
+        $code = <<<'CODE'
+        <?php
+        function func($arg = 1)
+        {
+            return $arg;
+        }
+
+        echo func();
+        CODE;
+
+        $this->expectOutputStringWithCode('1', $code);
+    }
+
+    public function testInvalidArgument(): void
+    {
+        $code = <<<'CODE'
+        <?php
+        function func($arg)
+        {
+            return $arg;
+        }
+
+        echo func();
+        CODE;
+
+        $this->expectException(Error::class);
+        $this->expectExceptionMessage('Uncaught ArgumentCountError: Too few arguments to function func()');
+        $this->interpreter->run($code);
     }
 }
