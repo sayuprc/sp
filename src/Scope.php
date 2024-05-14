@@ -7,7 +7,7 @@ namespace StrictPhp;
 class Scope
 {
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     private array $items;
 
