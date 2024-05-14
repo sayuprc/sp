@@ -43,9 +43,11 @@ use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Do_;
@@ -72,7 +74,7 @@ class Interpreter
     private Scope $scope;
 
     /**
-     * @var array
+     * @var array<string, array{params: array<int, Param>, stmts: array<int, Stmt>}>
      */
     private array $functions;
 
@@ -120,182 +122,182 @@ class Interpreter
     }
 
     /**
-     * @param mixed $stmt
+     * @param mixed $node
      *
      * @return mixed
      */
-    public function evaluate($stmt)
+    public function evaluate($node)
     {
-        switch (get_class($stmt)) {
+        switch (get_class($node)) {
             case Echo_::class:
-                $ret = [];
-                foreach ($stmt->exprs as $expr) {
-                    $ret[] = $this->evaluate($expr);
+                $results = [];
+                foreach ($node->exprs as $expr) {
+                    $results[] = $this->evaluate($expr);
                 }
-                echo implode('', $ret);
+                echo implode('', $results);
                 return null;
             case String_::class:
             case Int_::class:
             case Float_::class:
-                return $stmt->value;
+                return $node->value;
             case Array_::class:
-                $ret = [];
-                foreach ($stmt->items as $item) {
+                $array = [];
+                foreach ($node->items as $item) {
                     $value = $this->evaluate($item->value);
                     if (is_null($item->key)) {
-                        $ret[] = $value;
+                        $array[] = $value;
                     } else {
-                        $ret[$this->evaluate($item->key)] = $value;
+                        $array[$this->evaluate($item->key)] = $value;
                     }
                 }
-                return $ret;
+                return $array;
             case Concat::class:
-                return $this->evaluate($stmt->left) . $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) . $this->evaluate($node->right);
             case Smaller::class:
-                return $this->evaluate($stmt->left) < $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) < $this->evaluate($node->right);
             case SmallerOrEqual::class:
-                return $this->evaluate($stmt->left) <= $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) <= $this->evaluate($node->right);
             case Greater::class:
-                return $this->evaluate($stmt->left) > $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) > $this->evaluate($node->right);
             case GreaterOrEqual::class:
-                return $this->evaluate($stmt->left) >= $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) >= $this->evaluate($node->right);
             case Spaceship::class:
-                return $this->evaluate($stmt->left) <=> $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) <=> $this->evaluate($node->right);
             case Equal::class:
-                return $this->evaluate($stmt->left) == $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) == $this->evaluate($node->right);
             case NotEqual::class:
-                return $this->evaluate($stmt->left) != $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) != $this->evaluate($node->right);
             case Identical::class:
-                return $this->evaluate($stmt->left) === $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) === $this->evaluate($node->right);
             case NotIdentical::class:
-                return $this->evaluate($stmt->left) !== $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) !== $this->evaluate($node->right);
             case Plus::class:
-                return $this->evaluate($stmt->left) + $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) + $this->evaluate($node->right);
             case Minus::class:
-                return $this->evaluate($stmt->left) - $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) - $this->evaluate($node->right);
             case Mul::class:
-                return $this->evaluate($stmt->left) * $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) * $this->evaluate($node->right);
             case Div::class:
-                return $this->evaluate($stmt->left) / $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) / $this->evaluate($node->right);
             case Mod::class:
-                return $this->evaluate($stmt->left) % $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) % $this->evaluate($node->right);
             case Pow::class:
-                return $this->evaluate($stmt->left) ** $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) ** $this->evaluate($node->right);
             case BooleanAnd::class:
-                return $this->evaluate($stmt->left) && $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) && $this->evaluate($node->right);
             case BooleanOr::class:
-                return $this->evaluate($stmt->left) || $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) || $this->evaluate($node->right);
             case LogicalAnd::class:
-                return $this->evaluate($stmt->left) and $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) and $this->evaluate($node->right);
             case LogicalOr::class:
-                return $this->evaluate($stmt->left) or $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) or $this->evaluate($node->right);
             case LogicalXor::class:
-                return $this->evaluate($stmt->left) xor $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) xor $this->evaluate($node->right);
             case BitwiseAnd::class:
-                return $this->evaluate($stmt->left) & $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) & $this->evaluate($node->right);
             case BitwiseOr::class:
-                return $this->evaluate($stmt->left) | $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) | $this->evaluate($node->right);
             case BitwiseXor::class:
-                return $this->evaluate($stmt->left) ^ $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) ^ $this->evaluate($node->right);
             case Coalesce::class:
-                return $this->evaluate($stmt->left) ?? $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) ?? $this->evaluate($node->right);
             case ShiftLeft::class:
-                return $this->evaluate($stmt->left) << $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) << $this->evaluate($node->right);
             case ShiftRight::class:
-                return $this->evaluate($stmt->left) >> $this->evaluate($stmt->right);
+                return $this->evaluate($node->left) >> $this->evaluate($node->right);
             case If_::class:
-                $ifResult = $this->evaluate($stmt->cond);
+                $ifResult = $this->evaluate($node->cond);
 
                 if ($ifResult) {
-                    foreach ($stmt->stmts as $node) {
-                        $ret = $this->evaluate($node);
-                        if ($ret instanceof ContinueObject || $ret instanceof BreakObject) {
-                            return $ret;
+                    foreach ($node->stmts as $stmt) {
+                        $result = $this->evaluate($stmt);
+                        if ($result instanceof ContinueObject || $result instanceof BreakObject) {
+                            return $result;
                         }
                     }
                 }
 
                 $elseIfResult = false;
 
-                if (! $ifResult && 0 < count($stmt->elseifs)) {
-                    foreach ($stmt->elseifs as $elseif) {
+                if (! $ifResult && 0 < count($node->elseifs)) {
+                    foreach ($node->elseifs as $elseif) {
                         $elseIfResult = $this->evaluate($elseif);
                     }
                 }
 
-                if (! $ifResult && ! $elseIfResult && $stmt->else instanceof Else_) {
-                    $this->evaluate($stmt->else);
+                if (! $ifResult && ! $elseIfResult && $node->else instanceof Else_) {
+                    $this->evaluate($node->else);
                 }
                 break;
             case ElseIf_::class:
-                $elseIfResult = $this->evaluate($stmt->cond);
+                $elseIfResult = $this->evaluate($node->cond);
                 if ($elseIfResult) {
-                    foreach ($stmt->stmts as $node) {
-                        $this->evaluate($node);
+                    foreach ($node->stmts as $stmt) {
+                        $this->evaluate($stmt);
                     }
                 }
                 return $elseIfResult;
             case Else_::class:
-                foreach ($stmt->stmts as $node) {
-                    $this->evaluate($node);
+                foreach ($node->stmts as $stmt) {
+                    $this->evaluate($stmt);
                 }
                 break;
             case Nop::class:
                 // nothing todo
                 break;
             case Expression::class:
-                return $this->evaluate($stmt->expr);
+                return $this->evaluate($node->expr);
             case Assign::class:
-                $var = $stmt->var;
+                $var = $node->var;
                 if ($var instanceof Variable) {
                     $name = $var->name;
                     if ($name === 'this') {
                         throw new Exception('cannot re-assign $this');
                     }
-                    $ret = $this->evaluate($stmt->expr);
-                    $this->scope->set($name, $ret);
-                    return $ret;
+                    $value = $this->evaluate($node->expr);
+                    $this->scope->set($name, $value);
+                    return $value;
                 }
                 break;
             case Variable::class:
-                $name = $stmt->name;
+                $name = $node->name;
                 return $this->scope->get($name);
             case ConstFetch::class:
-                return match ($stmt->name->name) {
+                return match ($node->name->name) {
                     'true' => true,
                     'false' => false,
                     'null' => null,
                     default => throw new Exception('unknown const'),
                 };
             case ArrayDimFetch::class:
-                $array = $this->evaluate($stmt->var);
-                $key = $this->evaluate($stmt->dim);
+                $array = $this->evaluate($node->var);
+                $key = $this->evaluate($node->dim);
                 if (array_key_exists($key, $array)) {
                     return $array[$key];
                 }
                 throw new Exception("unknown index: {$key} in array");
             case Function_::class:
-                $name = $stmt->name->toString();
+                $name = $node->name->toString();
                 if (function_exists($name)) {
                     throw new Error("Cannot redeclare {$name}()");
                 }
                 $this->functions[$name] = [
-                    'params' => $stmt->params,
-                    'stmts' => $stmt->stmts,
+                    'params' => $node->params,
+                    'stmts' => $node->stmts,
                 ];
                 break;
             case FuncCall::class:
-                $name = $stmt->name->toString();
+                $name = $node->name->toString();
                 if (function_exists($name)) {
                     $args = [];
-                    foreach ($stmt->args as $arg) {
+                    foreach ($node->args as $arg) {
                         $args[] = $this->evaluate($arg);
                     }
                     return $name(...$args);
                 } elseif (array_key_exists($name, $this->functions)) {
                     $function = $this->functions[$name];
                     $args = [];
-                    foreach ($stmt->args as $arg) {
+                    foreach ($node->args as $arg) {
                         $args[] = $this->evaluate($arg);
                     }
                     $functionScope = new Scope();
@@ -310,40 +312,40 @@ class Interpreter
                     $beforeScope = $this->scope;
                     $this->scope = $functionScope;
                     foreach ($function['stmts'] as $stmt) {
-                        $ret = $this->evaluate($stmt);
+                        $result = $this->evaluate($stmt);
                         if ($stmt instanceof Return_) {
-                            return $ret;
+                            return $result;
                         }
                     }
                     $this->scope = $beforeScope;
                 }
                 break;
             case Arg::class:
-                return $this->evaluate($stmt->value);
+                return $this->evaluate($node->value);
             case Return_::class:
-                return $this->evaluate($stmt->expr);
+                return $this->evaluate($node->expr);
             case Foreach_::class:
                 $this->currentNest += 1;
-                $array = $this->evaluate($stmt->expr);
+                $array = $this->evaluate($node->expr);
                 foreach ($array as $key => $item) {
-                    if ($stmt->valueVar instanceof Variable) {
-                        $this->scope->set($stmt->valueVar->name, $item);
+                    if ($node->valueVar instanceof Variable) {
+                        $this->scope->set($node->valueVar->name, $item);
                     }
-                    if ($stmt->keyVar instanceof Variable) {
-                        $this->scope->set($stmt->keyVar->name, $key);
+                    if ($node->keyVar instanceof Variable) {
+                        $this->scope->set($node->keyVar->name, $key);
                     }
-                    foreach ($stmt->stmts as $expr) {
-                        $ret = $this->evaluate($expr);
+                    foreach ($node->stmts as $stmt) {
+                        $result = $this->evaluate($stmt);
 
-                        if ($ret instanceof BreakObject) {
-                            if (1 < $ret->num()) {
-                                $ret->decrement();
-                                return $ret;
+                        if ($result instanceof BreakObject) {
+                            if (1 < $result->num()) {
+                                $result->decrement();
+                                return $result;
                             }
                             break 2;
                         }
 
-                        if ($ret instanceof ContinueObject) {
+                        if ($result instanceof ContinueObject) {
                             break;
                         }
                     }
@@ -352,19 +354,19 @@ class Interpreter
                 break;
             case While_::class:
                 $this->currentNest += 1;
-                while ($this->evaluate($stmt->cond)) {
-                    foreach ($stmt->stmts as $node) {
-                        $ret = $this->evaluate($node);
+                while ($this->evaluate($node->cond)) {
+                    foreach ($node->stmts as $stmt) {
+                        $result = $this->evaluate($stmt);
 
-                        if ($ret instanceof BreakObject) {
-                            if (1 < $ret->num()) {
-                                $ret->decrement();
-                                return $ret;
+                        if ($result instanceof BreakObject) {
+                            if (1 < $result->num()) {
+                                $result->decrement();
+                                return $result;
                             }
                             break 2;
                         }
 
-                        if ($ret instanceof ContinueObject) {
+                        if ($result instanceof ContinueObject) {
                             break;
                         }
                     }
@@ -373,30 +375,30 @@ class Interpreter
                 break;
             case For_::class:
                 $this->currentNest += 1;
-                foreach ($stmt->init as $init) {
+                foreach ($node->init as $init) {
                     $this->evaluate($init);
                 }
                 while (true) {
-                    foreach ($stmt->cond as $cond) {
+                    foreach ($node->cond as $cond) {
                         if (! $this->evaluate($cond)) {
                             break 2;
                         }
                     }
-                    foreach ($stmt->stmts as $node) {
-                        $ret = $this->evaluate($node);
-                        if ($ret instanceof BreakObject) {
-                            if (1 < $ret->num()) {
-                                $ret->decrement();
-                                return $ret;
+                    foreach ($node->stmts as $stmt) {
+                        $result = $this->evaluate($stmt);
+                        if ($result instanceof BreakObject) {
+                            if (1 < $result->num()) {
+                                $result->decrement();
+                                return $result;
                             }
                             break 2;
                         }
 
-                        if ($ret instanceof ContinueObject) {
+                        if ($result instanceof ContinueObject) {
                             break;
                         }
                     }
-                    foreach ($stmt->loop as $loop) {
+                    foreach ($node->loop as $loop) {
                         $this->evaluate($loop);
                     }
                 }
@@ -405,52 +407,52 @@ class Interpreter
             case Do_::class:
                 $this->currentNest += 1;
                 do {
-                    foreach ($stmt->stmts as $node) {
-                        $ret = $this->evaluate($node);
+                    foreach ($node->stmts as $stmt) {
+                        $result = $this->evaluate($stmt);
 
-                        if ($ret instanceof BreakObject) {
-                            if (1 < $ret->num()) {
-                                $ret->decrement();
-                                return $ret;
+                        if ($result instanceof BreakObject) {
+                            if (1 < $result->num()) {
+                                $result->decrement();
+                                return $result;
                             }
                             break 2;
                         }
 
-                        if ($ret instanceof ContinueObject) {
+                        if ($result instanceof ContinueObject) {
                             break;
                         }
                     }
-                } while ($this->evaluate($stmt->cond));
+                } while ($this->evaluate($node->cond));
                 $this->currentNest = 0;
                 break;
             case Continue_::class:
                 return new ContinueObject();
             case Break_::class:
-                $breakNum = is_null($stmt->num) ? 1 : $this->evaluate($stmt->num);
+                $breakNum = is_null($node->num) ? 1 : $this->evaluate($node->num);
                 if ($this->currentNest < $breakNum) {
                     throw new Exception("cannot break {$breakNum} levels");
                 }
                 return new BreakObject($breakNum);
             case Switch_::class:
                 $this->currentNest += 1;
-                $cond = $this->evaluate($stmt->cond);
+                $cond = $this->evaluate($node->cond);
                 $isMatched = false;
-                foreach ($stmt->cases as $case) {
+                foreach ($node->cases as $case) {
                     if (is_null($case->cond)) {
-                        foreach ($case->stmts as $node) {
-                            $this->evaluate($node);
+                        foreach ($case->stmts as $stmt) {
+                            $this->evaluate($stmt);
                         }
                         break;
                     } elseif ($cond == $this->evaluate($case->cond) || $isMatched) {
                         $isMatched = true;
 
-                        foreach ($case->stmts as $node) {
-                            $ret = $this->evaluate($node);
+                        foreach ($case->stmts as $stmt) {
+                            $result = $this->evaluate($stmt);
 
-                            if ($ret instanceof BreakObject) {
-                                if (1 < $ret->num()) {
-                                    $ret->decrement();
-                                    return $ret;
+                            if ($result instanceof BreakObject) {
+                                if (1 < $result->num()) {
+                                    $result->decrement();
+                                    return $result;
                                 }
                                 break 2;
                             }
@@ -460,8 +462,8 @@ class Interpreter
                 $this->currentNest = 0;
                 break;
             case Match_::class:
-                $cond = $this->evaluate($stmt->cond);
-                foreach ($stmt->arms as $arm) {
+                $cond = $this->evaluate($node->cond);
+                foreach ($node->arms as $arm) {
                     if (is_null($arm->conds)) {
                         return $this->evaluate($arm->body);
                     }
@@ -473,12 +475,12 @@ class Interpreter
                 }
                 throw new Error("Unhandled match case {$cond}");
             case Include_::class:
-                $file = $this->evaluate($stmt->expr);
-                $isRequired = match ($stmt->type) {
+                $file = $this->evaluate($node->expr);
+                $isRequired = match ($node->type) {
                     Include_::TYPE_REQUIRE, Include_::TYPE_REQUIRE_ONCE => true,
                     default => false,
                 };
-                $isOnce = match ($stmt->type) {
+                $isOnce = match ($node->type) {
                     Include_::TYPE_INCLUDE_ONCE, Include_::TYPE_REQUIRE_ONCE => true,
                     default => false,
                 };
@@ -497,7 +499,7 @@ class Interpreter
                 }
                 break;
             case Isset_::class:
-                foreach ($stmt->vars as $var) {
+                foreach ($node->vars as $var) {
                     if (is_null($this->evaluate($var))) {
                         return false;
                     }
