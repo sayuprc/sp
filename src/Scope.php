@@ -36,4 +36,9 @@ class Scope
     {
         return $this->items[$key] ?? null;
     }
+
+    public function remove(string $key): void
+    {
+        unset($this->items[$key]);
+    }
 }
