@@ -63,6 +63,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
+use PhpParser\Node\Stmt\Unset_;
 use PhpParser\Node\Stmt\While_;
 use PhpParser\NodeDumper;
 use PhpParser\Parser;
@@ -508,6 +509,13 @@ class Interpreter
                 return true;
             case Empty_::class:
                 return empty($this->evaluate($node->expr));
+            case Unset_::class:
+                foreach ($node->vars as $var) {
+                    if ($var instanceof Variable) {
+                        $this->scope->remove($var->name);
+                    }
+                }
+                break;
         }
     }
 }
