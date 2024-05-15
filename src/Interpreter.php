@@ -39,6 +39,7 @@ use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\BinaryOp\Spaceship;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Empty_;
+use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\Isset_;
@@ -516,6 +517,9 @@ class Interpreter
                     }
                 }
                 break;
+            case Exit_::class:
+                $status = is_null($node->expr) ? 0 : $this->evaluate($node->expr);
+                exit($status);
         }
     }
 }
