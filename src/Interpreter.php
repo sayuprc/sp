@@ -38,6 +38,7 @@ use PhpParser\Node\Expr\BinaryOp\Smaller;
 use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\BinaryOp\Spaceship;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\Isset_;
@@ -505,6 +506,8 @@ class Interpreter
                     }
                 }
                 return true;
+            case Empty_::class:
+                return empty($this->evaluate($node->expr));
         }
     }
 }
