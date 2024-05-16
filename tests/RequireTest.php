@@ -12,7 +12,7 @@ class RequireTest extends TestCase
     {
         $code = <<<'CODE'
         <?php
-        require 'tests/require.php';
+        require 'tests/include/require.php';
         CODE;
 
         $this->expectOutputStringWithCode('require', $code);
@@ -22,8 +22,8 @@ class RequireTest extends TestCase
     {
         $code = <<<'CODE'
         <?php
-        require 'tests/require.php';
-        require 'tests/require.php';
+        require 'tests/include/require.php';
+        require 'tests/include/require.php';
         CODE;
 
         $this->expectOutputStringWithCode('requirerequire', $code);
@@ -33,11 +33,11 @@ class RequireTest extends TestCase
     {
         $code = <<<'CODE'
         <?php
-        require 'tests/not_exists.php';
+        require 'tests/include/not_exists.php';
         CODE;
 
         $this->expectException(Error::class);
-        $this->expectExceptionMessage("Failed opening required 'tests/not_exists.php'");
+        $this->expectExceptionMessage("Failed opening required 'tests/include/not_exists.php'");
 
         $this->interpreter->run($code);
     }
