@@ -10,6 +10,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BitwiseAnd;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
@@ -291,6 +292,27 @@ class Interpreter
                 ];
                 break;
             case FuncCall::class:
+                if ($node->name instanceof Variable) {
+                    $function = $this->evaluate($node->name);
+                    $args = [];
+                    foreach ($node->args as $arg) {
+                        $args[] = $this->evaluate($arg);
+                    }
+                    $functionScope = clone $this->scope;
+                    foreach ($function['params'] as $key => $param) {
+                        $arg = match (true) {
+                            isset($args[$key]) => $args[$key],
+                            ! isset($args[$key]) && ! is_null($param->default) => $this->evaluate($param->default),
+                            default => throw new Error("Uncaught ArgumentCountError: Too few arguments to function {$node->name->name}()"),
+                        };
+                        $functionScope->set($param->var->name, $arg);
+                    }
+                    $beforeScope = $this->scope;
+                    $this->scope = $functionScope;
+                    $result = $this->evaluate($function['expr']);
+                    $this->scope = $beforeScope;
+                    return $result;
+                }
                 $name = $node->name->toString();
                 if (function_exists($name)) {
                     $args = [];
@@ -521,6 +543,11 @@ class Interpreter
             case Exit_::class:
                 $status = is_null($node->expr) ? 0 : $this->evaluate($node->expr);
                 exit($status);
+            case ArrowFunction::class:
+                return [
+                    'params' => $node->params,
+                    'expr' => $node->expr,
+                ];
             default:
                 $token = $node instanceof Node
                     ? $node->getType()
