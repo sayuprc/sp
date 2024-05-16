@@ -6,6 +6,7 @@ namespace StrictPhp;
 
 use Error;
 use Exception;
+use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -520,6 +521,11 @@ class Interpreter
             case Exit_::class:
                 $status = is_null($node->expr) ? 0 : $this->evaluate($node->expr);
                 exit($status);
+            default:
+                $token = $node instanceof Node
+                    ? $node->getType()
+                    : 'unknown';
+                throw new Exception("Unknown token: {$token}");
         }
     }
 }
