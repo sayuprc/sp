@@ -10,7 +10,7 @@ class IncludeOnceTest extends TestCase
     {
         $code = <<<'CODE'
         <?php
-        include_once 'tests/include_once.php';
+        include_once 'tests/include/include_once.php';
         CODE;
 
         $this->expectOutputStringWithCode('include_once', $code);
@@ -20,8 +20,8 @@ class IncludeOnceTest extends TestCase
     {
         $code = <<<'CODE'
         <?php
-        include_once 'tests/include_once.php';
-        include_once 'tests/include_once.php';
+        include_once 'tests/include/include_once.php';
+        include_once 'tests/include/include_once.php';
         CODE;
 
         $this->expectOutputStringWithCode('include_once', $code);
@@ -31,7 +31,7 @@ class IncludeOnceTest extends TestCase
     {
         $code = <<<'CODE'
         <?php
-        include_once 'tests/not_exists.php';
+        include_once 'tests/include/not_exists.php';
         CODE;
 
         $this->expectOutputStringWithCode('', $code);

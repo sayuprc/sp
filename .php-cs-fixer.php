@@ -8,6 +8,7 @@ $finder = PhpCsFixer\Finder::create()
     ])
     ->exclude([
         'vendor',
+        'tests/include',
     ]);
 
 return (new PhpCsFixer\Config())

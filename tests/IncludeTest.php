@@ -10,7 +10,7 @@ class IncludeTest extends TestCase
     {
         $code = <<<'CODE'
         <?php
-        include 'tests/include.php';
+        include 'tests/include/include.php';
         CODE;
 
         $this->expectOutputStringWithCode('include', $code);
@@ -20,8 +20,8 @@ class IncludeTest extends TestCase
     {
         $code = <<<'CODE'
         <?php
-        include 'tests/include.php';
-        include 'tests/include.php';
+        include 'tests/include/include.php';
+        include 'tests/include/include.php';
         CODE;
 
         $this->expectOutputStringWithCode('includeinclude', $code);
@@ -31,7 +31,7 @@ class IncludeTest extends TestCase
     {
         $code = <<<'CODE'
         <?php
-        include 'tests/not_exists.php';
+        include 'tests/include/not_exists.php';
         CODE;
 
         $this->expectOutputStringWithCode('', $code);
