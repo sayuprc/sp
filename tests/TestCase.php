@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use LogicException;
 use PhpParser\ParserFactory;
 use PhpParser\PhpVersion;
 use PHPUnit\Framework\TestCase as BaseTestCase;
@@ -23,11 +24,48 @@ class TestCase extends BaseTestCase
     }
 
     /**
+     * @param non-empty-string $file
+     */
+    protected function runFile(string $file): void
+    {
+        if (! file_exists($file)) {
+            throw new LogicException("File not found: {$file}");
+        }
+
+        $code = implode(PHP_EOL, file($file));
+
+        $this->runCode($code);
+    }
+
+    /**
      * @param non-empty-string $code
      */
-    protected function expectOutputStringWithCode(string $expected, string $code): void
+    protected function runCode(string $code): void
+    {
+        $this->interpreter->run($code);
+    }
+
+    protected function expectedOutputString(string $expected): self
     {
         $this->expectOutputString($expected);
-        $this->interpreter->run($code);
+
+        return $this;
+    }
+
+    /**
+     * @param class-string $exception
+     */
+    protected function expectedException(string $exception): self
+    {
+        $this->expectException($exception);
+
+        return $this;
+    }
+
+    protected function expectedExceptionMessage(string $message): self
+    {
+        $this->expectExceptionMessage($message);
+
+        return $this;
     }
 }
