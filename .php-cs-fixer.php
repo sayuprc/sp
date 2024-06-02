@@ -8,8 +8,8 @@ $finder = PhpCsFixer\Finder::create()
     ])
     ->exclude([
         'vendor',
-        'tests/include',
-    ]);
+    ])
+    ->filter(fn (SplFileInfo $file): bool => ! preg_match('#/tests/[^/]+/data/#', $file->getRealPath()));
 
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
