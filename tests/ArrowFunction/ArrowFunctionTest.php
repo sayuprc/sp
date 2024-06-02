@@ -43,4 +43,10 @@ class ArrowFunctionTest extends TestCase
         $this->expectedOutputString('func_b/func_a')
             ->runFile(__DIR__ . '/data/arrow-function-call-other-function.php');
     }
+
+    public function testCallVariableSameName(): void
+    {
+        $this->expectedOutputString('fugahoge')
+            ->runFile(__DIR__ . '/data/arrow-function-call-vatiable-same-name.php');
+    }
 }
