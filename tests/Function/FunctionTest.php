@@ -64,4 +64,10 @@ class FunctionTest extends TestCase
         $this->expectedOutputString('func_b/func_a')
             ->runFile(__DIR__ . '/data/function-call-other-function.php');
     }
+
+    public function testCallVariableSameName(): void
+    {
+        $this->expectedOutputString('fugahoge')
+            ->runFile(__DIR__ . '/data/function-call-vatiable-same-name.php');
+    }
 }

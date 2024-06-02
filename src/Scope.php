@@ -11,27 +11,16 @@ class Scope
      */
     private array $items;
 
-    public function __construct()
+    public function __construct(public readonly ?Scope $parentScope = null)
     {
         $this->items = [];
     }
 
-    /**
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return void
-     */
     public function set(string $key, mixed $value): void
     {
         $this->items[$key] = $value;
     }
 
-    /**
-     * @param string $key
-     *
-     * @return mixed
-     */
     public function get(string $key): mixed
     {
         return $this->items[$key] ?? null;
@@ -40,5 +29,10 @@ class Scope
     public function remove(string $key): void
     {
         unset($this->items[$key]);
+    }
+
+    public function merge(Scope $other): void
+    {
+        $this->items = array_merge($this->items, $other->items);
     }
 }
