@@ -28,6 +28,7 @@ class TestCase extends BaseTestCase
     protected function expectOutputStringWithCode(string $expected, string $code): void
     {
         $this->expectOutputString($expected);
+
         $this->interpreter->run($code);
     }
 }
