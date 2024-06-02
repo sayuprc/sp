@@ -25,4 +25,22 @@ class ArrowFunctionTest extends TestCase
         $this->expectedOutputString('hoge')
             ->runFile(__DIR__ . '/data/arrow-function-default-value.php');
     }
+
+    public function testCallVariableOutsideScope(): void
+    {
+        $this->expectedOutputString('outside')
+            ->runFile(__DIR__ . '/data/arrow-function-call-variable-outside-scope.php');
+    }
+
+    public function testCallOtherArrowFunction(): void
+    {
+        $this->expectedOutputString('arrow_func_b/arrow_func_a')
+            ->runFile(__DIR__ . '/data/arrow-function-call-other-arrow-function.php');
+    }
+
+    public function testCallOtherFunction(): void
+    {
+        $this->expectedOutputString('func_b/func_a')
+            ->runFile(__DIR__ . '/data/arrow-function-call-other-function.php');
+    }
 }

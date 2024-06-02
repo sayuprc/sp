@@ -58,4 +58,10 @@ class FunctionTest extends TestCase
             ->expectedExceptionMessage('Cannot redeclare in_array()')
             ->runFile(__DIR__ . '/data/function-redeclare-built-in-function.php');
     }
+
+    public function testCallOtherFunction(): void
+    {
+        $this->expectedOutputString('func_b/func_a')
+            ->runFile(__DIR__ . '/data/function-call-other-function.php');
+    }
 }
