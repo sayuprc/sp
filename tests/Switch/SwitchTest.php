@@ -10,77 +10,25 @@ class SwitchTest extends TestCase
 {
     public function testSwitch(): void
     {
-        $code = <<<'CODE'
-        <?php
-        switch ('a') {
-            case 'a':
-                echo 'a';
-                break;
-            case 'b':
-                echo 'b';
-                break;
-            default:
-                echo 'c';
-        }
-        CODE;
-
         $this->expectedOutputString('a')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/switch-normal.php');
     }
 
     public function testSwitchDefault(): void
     {
-        $code = <<<'CODE'
-        <?php
-        switch (0) {
-            case 'a':
-                echo 'a';
-                break;
-            case 'b':
-                echo 'b';
-                break;
-            default:
-                echo 'c';
-        }
-        CODE;
-
         $this->expectedOutputString('c')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/switch-default.php');
     }
 
     public function testSwitchWithoutBreak(): void
     {
-        $code = <<<'CODE'
-        <?php
-        switch (0) {
-            case 0:
-                echo 0;
-            case 1:
-                echo 1;
-            case 2:
-                echo 2;
-        }
-        CODE;
-
         $this->expectedOutputString('012')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/switch-without-break.php');
     }
 
     public function testSwitchWithMultiCase(): void
     {
-        $code = <<<'CODE'
-        <?php
-        switch (0) {
-            case 0:
-            case 1:
-                echo 'ok';
-                break;
-            case 2:
-                echo 2;
-        }
-        CODE;
-
         $this->expectedOutputString('ok')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/switch-multi-case.php');
     }
 }

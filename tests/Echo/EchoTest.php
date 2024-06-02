@@ -10,45 +10,25 @@ class EchoTest extends TestCase
 {
     public function testEchoString(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 'a';
-        CODE;
-
         $this->expectedOutputString('a')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/echo-string.php');
     }
 
     public function testEchoInt(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1;
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/echo-int.php');
     }
 
     public function testEchoFloat(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1.1;
-        CODE;
-
         $this->expectedOutputString('1.1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/echo-float.php');
     }
 
     public function testEchoMultiElements(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 'a', 'b';
-        CODE;
-
         $this->expectedOutputString('ab')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/echo-multi-elements.php');
     }
 }

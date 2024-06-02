@@ -13,7 +13,7 @@ class RequireOnceTest extends TestCase
     {
         $code = <<<'CODE'
         <?php
-        require_once 'tests/RequireOnce/data/require_once.php';
+        require_once 'tests/RequireOnce/data/require-once.php';
         CODE;
 
         $this->expectedOutputString('require_once')
@@ -24,8 +24,8 @@ class RequireOnceTest extends TestCase
     {
         $code = <<<'CODE'
         <?php
-        require_once 'tests/RequireOnce/data/require_once.php';
-        require_once 'tests/RequireOnce/data/require_once.php';
+        require_once 'tests/RequireOnce/data/require-once.php';
+        require_once 'tests/RequireOnce/data/require-once.php';
         CODE;
 
         $this->expectedOutputString('require_once')
@@ -36,11 +36,11 @@ class RequireOnceTest extends TestCase
     {
         $code = <<<'CODE'
         <?php
-        require_once 'tests/RequireOnce/data/not_exists.php';
+        require_once 'tests/RequireOnce/data/not-exists.php';
         CODE;
 
         $this->expectedException(Error::class)
-            ->expectedExceptionMessage("Failed opening required 'tests/RequireOnce/data/not_exists.php'")
+            ->expectedExceptionMessage("Failed opening required 'tests/RequireOnce/data/not-exists.php'")
             ->runCode($code);
     }
 }

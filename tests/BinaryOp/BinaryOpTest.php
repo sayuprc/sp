@@ -10,485 +10,253 @@ class BinaryOpTest extends TestCase
 {
     public function testPlus(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 + 1;
-        CODE;
-
         $this->expectedOutputString('2')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/plus.php');
     }
 
     public function testMinus(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 2 - 1;
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/minus.php');
     }
 
     public function testMul(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 2 * 2;
-        CODE;
-
         $this->expectedOutputString('4')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/mul.php');
     }
 
     public function testDiv(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 6 / 2;
-        CODE;
-
         $this->expectedOutputString('3')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/div.php');
     }
 
     public function testMod(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 5 % 3;
-        CODE;
-
         $this->expectedOutputString('2')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/mod.php');
     }
 
     public function testPow(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 3 ** 2;
-        CODE;
-
         $this->expectedOutputString('9')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/pow.php');
     }
 
     public function testConcat(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 . 2;
-        CODE;
-
         $this->expectedOutputString('12')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/concat.php');
     }
 
     public function testSmallerIsTrue(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 < 2;
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/smaller-is-true.php');
     }
 
     public function testSmallerIsFalse(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 2 < 1;
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/smaller-is-false.php');
     }
 
     public function testSmallerOrEqualIsTrue(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 <= 2;
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/smaller-or-equal-is-true.php');
     }
 
     public function testSmallerOrEqualIsFalse(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 2 <= 1;
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/smaller-or-equal-is-false.php');
     }
 
     public function testGreaterIsTrue(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 2 > 1;
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/greater-is-true.php');
     }
 
     public function testGreaterIsFalse(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 > 2;
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/greater-is-false.php');
     }
 
     public function testGreaterOrEqualIsTrue(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 2 >= 1;
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/greater-equal-is-true.php');
     }
 
     public function testGreaterOrEqualIsFalse(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 >= 2;
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/greater-equal-is-false.php');
     }
 
     public function testSpaceshipIsSmaller(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 <=> 2;
-        CODE;
-
         $this->expectedOutputString('-1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/spaceship-is-smaller.php');
     }
 
     public function testSpaceshipIsEqual(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 <=> 1;
-        CODE;
-
         $this->expectedOutputString('0')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/spaceship-is-equal.php');
     }
 
     public function testSpaceshipIsGreater(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 2 <=> 1;
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/spaceship-is-greater.php');
     }
 
     public function testEqualSameType(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 == 1;
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/equal-same-type.php');
     }
 
     public function testNotEqualSameType(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 != 0;
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/not-equal-same-type.php');
     }
 
     public function testEqualNotSameType(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 == '1';
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/equal-not-same-type.php');
     }
 
     public function testNotEqualNotSameType(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 != '0';
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/not-equal-not-same-type.php');
     }
 
     public function testIdenticalSameType(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 === 1;
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/identical-same-type.php');
     }
 
     public function testNotIdenticalSameType(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 !== 0;
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/not-identical-same-type.php');
     }
 
     public function testIdenticalNotSameType(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 === '1';
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/identical-not-same-type.php');
     }
 
     public function testNotIdenticalNotSameType(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 !== '1';
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/not-identical-not-same-type.php');
     }
 
     public function testBooleanAndIsTrue(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 && 1;
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/boolean-and-is-true.php');
     }
 
     public function testBooleanAndIsFalse(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 && 0;
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/boolean-and-is-false.php');
     }
 
     public function testBooleanOrIsTrue(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 || 0;
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/boolean-or-is-true.php');
     }
 
     public function testBooleanOrIsFalse(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 0 || 0;
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/boolean-or-is-false.php');
     }
 
     public function testLogicalAndIsTrue(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 and 1;
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/logical-and-is-true.php');
     }
 
     public function testLogicalAndIsFalse(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 and 0;
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/logical-and-is-false.php');
     }
 
     public function testLogicalOrIsTrue(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 or 0;
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/logical-or-is-true.php');
     }
 
     public function testLogicalOrIsFalse(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 0 or 0;
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/logical-or-is-false.php');
     }
 
     public function testLogicalXorIsTrue(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 xor 0;
-        CODE;
-
-        // true xor false => true
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/logical-xor-is-true.php');
     }
 
     public function testLogicalXorIsFalse(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 xor 1;
-        CODE;
-
-        // true xor true => false
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/logical-xor-is-false.php');
     }
 
     public function testCoalesce(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo null ?? 1;
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/coalesce.php');
     }
 
     public function testShiftLeft(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 11 << 2;
-        CODE;
-
-        // 11 => 00001011
-        // << 2 => 00101100 => 44
-
         $this->expectedOutputString('44')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/shift-left.php');
     }
 
     public function testShiftRight(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 10 >> 2;
-        CODE;
-
-        // 10 => 00001010
-        // >> 2 => 00000010 => 2
-
         $this->expectedOutputString('2')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/shift-right.php');
     }
 
     public function testBitwiseAnd(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 & 2;
-        CODE;
-
-        // 1 => 00000001
-        // 2 => 00000010
-        // & => 00000000
-
         $this->expectedOutputString('0')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/bitwise-and.php');
     }
 
     public function testBitwiseOr(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 | 2;
-        CODE;
-
-        // 1 => 00000001
-        // 2 => 00000010
-        // | => 00000011
-
         $this->expectedOutputString('3')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/bitwise-or.php');
     }
 
     public function testBitwiseXor(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo 1 ^ 3;
-        CODE;
-
-        // 1 => 00000001
-        // 3 => 00000011
-        // ^ => 00000010
-
         $this->expectedOutputString('2')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/bitwise-xor.php');
     }
 }

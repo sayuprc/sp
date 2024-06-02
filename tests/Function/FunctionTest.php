@@ -11,125 +11,51 @@ class FunctionTest extends TestCase
 {
     public function testFunction(): void
     {
-        $code = <<<'CODE'
-        <?php
-        function func()
-        {
-            return 1 + 1;
-        }
-
-        echo func();
-        CODE;
-
         $this->expectedOutputString('2')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/function-normal.php');
     }
 
     public function testFunctionNotReturn(): void
     {
-        $code = <<<'CODE'
-        <?php
-        function func()
-        {
-            $a = 1 + 1;
-        }
-
-        echo func();
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/function-not-return.php');
     }
 
     public function testFunctionWithArg(): void
     {
-        $code = <<<'CODE'
-        <?php
-        function func($arg)
-        {
-            return $arg + 1;
-        }
-
-        echo func(1);
-        CODE;
-
         $this->expectedOutputString('2')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/function-with-arg.php');
     }
 
-    public function testCallVariableWithoutFunctionScope(): void
+    public function testCallVariableOutsideFunctionScope(): void
     {
-        $code = <<<'CODE'
-        <?php
-        function func()
-        {
-            return $arg;
-        }
-
-        $arg = 1;
-
-        echo func();
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/function-call-variable-outside-function-scope.php');
     }
 
     public function testWithDefaultValue(): void
     {
-        $code = <<<'CODE'
-        <?php
-        function func($arg = 1)
-        {
-            return $arg;
-        }
-
-        echo func();
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/function-with-default-value.php');
     }
 
     public function testInvalidArgument(): void
     {
-        $code = <<<'CODE'
-        <?php
-        function func($arg)
-        {
-            return $arg;
-        }
-
-        echo func();
-        CODE;
-
         $this->expectedException(Error::class)
             ->expectedExceptionMessage('Uncaught ArgumentCountError: Too few arguments to function func()')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/function-invalid-argument.php');
     }
 
     public function testCallBuiltInFunction(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo in_array(1, [1, 2, 3], true);
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/function-call-built-in-function.php');
     }
 
-    public function testDeclareBuiltInFunction(): void
+    public function testRedeclareBuiltInFunction(): void
     {
-        $code = <<<'CODE'
-        <?php
-        function in_array()
-        {
-        }
-        CODE;
-
         $this->expectedException(Error::class)
             ->expectedExceptionMessage('Cannot redeclare in_array()')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/function-redeclare-built-in-function.php');
     }
 }

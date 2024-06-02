@@ -11,92 +11,38 @@ class ForeachTest extends TestCase
 {
     public function testForeach(): void
     {
-        $code = <<<'CODE'
-        <?php
-        foreach (['a', 'b', 'c'] as $item) {
-            echo $item;
-        }
-        CODE;
-
         $this->expectedOutputString('abc')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/foreach-normal.php');
     }
 
     public function testForeachWithKey(): void
     {
-        $code = <<<'CODE'
-        <?php
-        foreach (['a', 'b', 'c'] as $key => $item) {
-            echo $key . '=>' . $item;
-        }
-        CODE;
-
         $this->expectedOutputString('0=>a1=>b2=>c')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/foreach-with-key.php');
     }
 
     public function testForeachWithBreak(): void
     {
-        $code = <<<'CODE'
-        <?php
-        foreach (['a', 'b', 'c'] as $item) {
-            if ($item === 'b') {
-                break;
-            }
-            echo $item;
-        }
-        CODE;
-
         $this->expectedOutputString('a')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/foreach-with-break.php');
     }
 
     public function testBreakInNestedForeach(): void
     {
-        $code = <<<'CODE'
-        <?php
-        foreach ([1, 2, 3] as $a) {
-            echo $a;
-            foreach ([1, 2, 3] as $b) {
-                echo $b;
-                if ($b === 2) {
-                    break 2;
-                }
-            }
-        }
-        CODE;
-
         $this->expectedOutputString('112')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/foreach-break-in-nested-foreach.php');
     }
 
     public function testInvalidBreakNum(): void
     {
-        $code = <<<'CODE'
-        <?php
-        foreach ([1, 2, 3] as $a) {
-            break 2;
-        }
-        CODE;
-
         $this->expectedException(Exception::class)
             ->expectedExceptionMessage('cannot break 2 levels')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/foreach-invalid-break-num.php');
     }
 
     public function testForeachWithContinue(): void
     {
-        $code = <<<'CODE'
-        <?php
-        foreach (['a', 'b', 'c'] as $item) {
-            if ($item === 'b') {
-                continue;
-            }
-            echo $item;
-        }
-        CODE;
-
         $this->expectedOutputString('ac')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/foreach-with-continue.php');
     }
 }

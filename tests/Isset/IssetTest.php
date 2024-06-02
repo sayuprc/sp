@@ -10,109 +10,55 @@ class IssetTest extends TestCase
 {
     public function testSetString(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $var = 'var';
-        echo isset($var);
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/isset-string.php');
     }
 
     public function testSetTruthyInt(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $var = 1;
-        echo isset($var);
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/isset-truthy-int.php');
     }
 
     public function testSetFalsyInt(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $var = 0;
-        echo isset($var);
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/isset-falsy-int.php');
     }
 
     public function testSetTrue(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $var = true;
-        echo isset($var);
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/isset-true.php');
     }
 
     public function testSetFalse(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $var = false;
-        echo isset($var);
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/isset-false.php');
     }
 
     public function testSetNull(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $var = null;
-        echo isset($var);
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/isset-null.php');
     }
 
-    public function testNotSet(): void
+    public function testUndefined(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo isset($var);
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/isset-undefined.php');
     }
 
     public function testAllSet(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $foo = 'var';
-        $bar = 'var';
-        echo isset($foo, $bar);
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/isset-all-set.php');
     }
 
     public function testNotAllSet(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $foo = 'var';
-        echo isset($foo, $bar);
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/isset-not-all-set.php');
     }
 }

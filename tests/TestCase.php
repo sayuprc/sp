@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use LogicException;
 use PhpParser\ParserFactory;
 use PhpParser\PhpVersion;
 use PHPUnit\Framework\TestCase as BaseTestCase;
@@ -20,6 +21,20 @@ class TestCase extends BaseTestCase
         $parser = (new ParserFactory())->createForVersion(PhpVersion::fromString('8.2'));
 
         $this->interpreter = new Interpreter($parser);
+    }
+
+    /**
+     * @param non-empty-string $file
+     */
+    protected function runFile(string $file): void
+    {
+        if (! file_exists($file)) {
+            throw new LogicException("File not found: {$file}");
+        }
+
+        $code = implode(PHP_EOL, file($file));
+
+        $this->runCode($code);
     }
 
     /**

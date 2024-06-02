@@ -11,48 +11,26 @@ class AssignTest extends TestCase
 {
     public function testAssign(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $var = 'a';
-        echo $var;
-        CODE;
-
         $this->expectedOutputString('a')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/assign-normal.php');
     }
 
     public function testNotAssign(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo $var;
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/assign-not-assign.php');
     }
 
     public function testMultipleAssign(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $foo = $bar = $baz = 10;
-        echo $foo, $bar, $baz;
-        CODE;
-
         $this->expectedOutputString('101010')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/assign-multiple-assign.php');
     }
 
-    public function testAssignThis(): void
+    public function testReassignThis(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $this = 1;
-        CODE;
-
         $this->expectedException(Exception::class)
             ->expectedExceptionMessage('cannot re-assign $this')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/assign-reassign-this.php');
     }
 }

@@ -10,34 +10,19 @@ class ConstFetchTest extends TestCase
 {
     public function testTrue(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo true;
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/const-fetch-true.php');
     }
 
     public function testFalse(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo false;
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/const-fetch-false.php');
     }
 
     public function testNull(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo null;
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/const-fetch-null.php');
     }
 }

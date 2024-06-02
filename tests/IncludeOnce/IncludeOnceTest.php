@@ -12,7 +12,7 @@ class IncludeOnceTest extends TestCase
     {
         $code = <<<'CODE'
         <?php
-        include_once 'tests/IncludeOnce/data/include_once.php';
+        include_once 'tests/IncludeOnce/data/include-once.php';
         CODE;
 
         $this->expectedOutputString('include_once')
@@ -23,8 +23,8 @@ class IncludeOnceTest extends TestCase
     {
         $code = <<<'CODE'
         <?php
-        include_once 'tests/IncludeOnce/data/include_once.php';
-        include_once 'tests/IncludeOnce/data/include_once.php';
+        include_once 'tests/IncludeOnce/data/include-once.php';
+        include_once 'tests/IncludeOnce/data/include-once.php';
         CODE;
 
         $this->expectedOutputString('include_once')
@@ -35,7 +35,7 @@ class IncludeOnceTest extends TestCase
     {
         $code = <<<'CODE'
         <?php
-        include_once 'tests/IncludeOnce/data/not_exists.php';
+        include_once 'tests/IncludeOnce/data/not-exists.php';
         CODE;
 
         $this->expectedOutputString('')

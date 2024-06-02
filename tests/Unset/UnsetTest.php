@@ -10,29 +10,13 @@ class UnsetTest extends TestCase
 {
     public function test(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $foo = 'hoge';
-        $bar = 'fuga';
-        unset($foo);
-        echo $foo, $bar;
-        CODE;
-
         $this->expectedOutputString('fuga')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/unset-normal.php');
     }
 
     public function testUnsetMulti(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $foo = 'hoge';
-        $bar = 'fuga';
-        unset($foo, $bar);
-        echo $foo, $bar;
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/unset-multi.php');
     }
 }

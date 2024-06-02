@@ -10,97 +10,55 @@ class EmptyTest extends TestCase
 {
     public function testIntOne(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $var = 1;
-        echo empty($var);
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
-    }
-
-    public function testEmptyString(): void
-    {
-        $code = <<<'CODE'
-        <?php
-        $var = '';
-        echo empty($var);
-        CODE;
-
-        $this->expectedOutputString('1')
-            ->runCode($code);
-    }
-
-    public function testStringZero(): void
-    {
-        $code = <<<'CODE'
-        <?php
-        $var = '0';
-        echo empty($var);
-        CODE;
-
-        $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/empty-int-one.php');
     }
 
     public function testIntZero(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $var = 0;
-        echo empty($var);
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/empty-int-zero.php');
+    }
+
+    public function testEmptyString(): void
+    {
+        $this->expectedOutputString('1')
+            ->runFile(__DIR__ . '/data/empty-string.php');
+    }
+
+    public function testStringOne(): void
+    {
+        $this->expectedOutputString('1')
+            ->runFile(__DIR__ . '/data/empty-string-zero.php');
+    }
+
+    public function testStringZero(): void
+    {
+        $this->expectedOutputString('1')
+            ->runFile(__DIR__ . '/data/empty-string-zero.php');
     }
 
     public function testNull(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $var = null;
-        echo empty($var);
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/empty-null.php');
     }
 
     public function testDefined(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $var;
-        echo empty($var);
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/empty-defined.php');
     }
 
     public function testEmptyArray(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $var = [];
-        echo empty($var);
-        CODE;
-
         $this->expectedOutputString('1')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/empty-array.php');
     }
 
     public function testNotEmptyArray(): void
     {
-        $code = <<<'CODE'
-        <?php
-        $var = [1];
-        echo empty($var);
-        CODE;
-
         $this->expectedOutputString('')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/empty-not-empty-array.php');
     }
 }

@@ -11,43 +11,20 @@ class MatchTest extends TestCase
 {
     public function testMatch(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo match (0 < 1) {
-            true => 'ok',
-            default => 'no',
-        };
-        CODE;
-
         $this->expectedOutputString('ok')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/match-normal.php');
     }
 
     public function testMatchDefault(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo match (0 > 1) {
-            true => 'ok',
-            default => 'no',
-        };
-        CODE;
-
         $this->expectedOutputString('no')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/match-default.php');
     }
 
     public function testMatchUnhandled(): void
     {
-        $code = <<<'CODE'
-        <?php
-        echo match (0 > 1) {
-            true => 'ok',
-        };
-        CODE;
-
         $this->expectedException(Error::class)
             ->expectedExceptionMessage('Unhandled match case')
-            ->runCode($code);
+            ->runFile(__DIR__ . '/data/match-unhandled.php');
     }
 }
