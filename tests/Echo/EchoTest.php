@@ -15,7 +15,8 @@ class EchoTest extends TestCase
         echo 'a';
         CODE;
 
-        $this->expectOutputStringWithCode('a', $code);
+        $this->expectedOutputString('a')
+            ->runCode($code);
     }
 
     public function testEchoInt(): void
@@ -25,7 +26,8 @@ class EchoTest extends TestCase
         echo 1;
         CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testEchoFloat(): void
@@ -35,7 +37,8 @@ class EchoTest extends TestCase
         echo 1.1;
         CODE;
 
-        $this->expectOutputStringWithCode('1.1', $code);
+        $this->expectedOutputString('1.1')
+            ->runCode($code);
     }
 
     public function testEchoMultiElements(): void
@@ -45,6 +48,7 @@ class EchoTest extends TestCase
         echo 'a', 'b';
         CODE;
 
-        $this->expectOutputStringWithCode('ab', $code);
+        $this->expectedOutputString('ab')
+            ->runCode($code);
     }
 }

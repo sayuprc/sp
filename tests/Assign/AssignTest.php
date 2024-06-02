@@ -17,7 +17,8 @@ class AssignTest extends TestCase
         echo $var;
         CODE;
 
-        $this->expectOutputStringWithCode('a', $code);
+        $this->expectedOutputString('a')
+            ->runCode($code);
     }
 
     public function testNotAssign(): void
@@ -27,7 +28,8 @@ class AssignTest extends TestCase
         echo $var;
         CODE;
 
-        $this->expectOutputStringWithCode('', $code);
+        $this->expectedOutputString('')
+            ->runCode($code);
     }
 
     public function testMultipleAssign(): void
@@ -38,7 +40,8 @@ class AssignTest extends TestCase
         echo $foo, $bar, $baz;
         CODE;
 
-        $this->expectOutputStringWithCode('101010', $code);
+        $this->expectedOutputString('101010')
+            ->runCode($code);
     }
 
     public function testAssignThis(): void
@@ -48,9 +51,8 @@ class AssignTest extends TestCase
         $this = 1;
         CODE;
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('cannot re-assign $this');
-
-        $this->interpreter->run($code);
+        $this->expectedException(Exception::class)
+            ->expectedExceptionMessage('cannot re-assign $this')
+            ->runCode($code);
     }
 }

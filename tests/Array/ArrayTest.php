@@ -20,7 +20,8 @@ class ArrayTest extends TestCase
          echo $array[0], $array[2];
          CODE;
 
-        $this->expectOutputStringWithCode('foobuz', $code);
+        $this->expectedOutputString('foobuz')
+            ->runCode($code);
     }
 
     public function testArrayWithKey(): void
@@ -35,7 +36,8 @@ class ArrayTest extends TestCase
         echo $array['foo'], $array['buz'];
         CODE;
 
-        $this->expectOutputStringWithCode('hogepiyo', $code);
+        $this->expectedOutputString('hogepiyo')
+            ->runCode($code);
     }
 
     public function testNestedArray(): void
@@ -55,6 +57,7 @@ class ArrayTest extends TestCase
         echo $array[0][0], $array[1][0];
         CODE;
 
-        $this->expectOutputStringWithCode('hogefoo', $code);
+        $this->expectedOutputString('hogefoo')
+            ->runCode($code);
     }
 }

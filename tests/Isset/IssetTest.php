@@ -16,7 +16,8 @@ class IssetTest extends TestCase
         echo isset($var);
         CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testSetTruthyInt(): void
@@ -27,7 +28,8 @@ class IssetTest extends TestCase
         echo isset($var);
         CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testSetFalsyInt(): void
@@ -38,7 +40,8 @@ class IssetTest extends TestCase
         echo isset($var);
         CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testSetTrue(): void
@@ -49,7 +52,8 @@ class IssetTest extends TestCase
         echo isset($var);
         CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testSetFalse(): void
@@ -60,7 +64,8 @@ class IssetTest extends TestCase
         echo isset($var);
         CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testSetNull(): void
@@ -71,7 +76,8 @@ class IssetTest extends TestCase
         echo isset($var);
         CODE;
 
-        $this->expectOutputStringWithCode('', $code);
+        $this->expectedOutputString('')
+            ->runCode($code);
     }
 
     public function testNotSet(): void
@@ -81,7 +87,8 @@ class IssetTest extends TestCase
         echo isset($var);
         CODE;
 
-        $this->expectOutputStringWithCode('', $code);
+        $this->expectedOutputString('')
+            ->runCode($code);
     }
 
     public function testAllSet(): void
@@ -93,7 +100,8 @@ class IssetTest extends TestCase
         echo isset($foo, $bar);
         CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testNotAllSet(): void
@@ -104,6 +112,7 @@ class IssetTest extends TestCase
         echo isset($foo, $bar);
         CODE;
 
-        $this->expectOutputStringWithCode('', $code);
+        $this->expectedOutputString('')
+            ->runCode($code);
     }
 }

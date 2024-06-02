@@ -21,7 +21,8 @@ class FunctionTest extends TestCase
         echo func();
         CODE;
 
-        $this->expectOutputStringWithCode('2', $code);
+        $this->expectedOutputString('2')
+            ->runCode($code);
     }
 
     public function testFunctionNotReturn(): void
@@ -36,7 +37,8 @@ class FunctionTest extends TestCase
         echo func();
         CODE;
 
-        $this->expectOutputStringWithCode('', $code);
+        $this->expectedOutputString('')
+            ->runCode($code);
     }
 
     public function testFunctionWithArg(): void
@@ -51,7 +53,8 @@ class FunctionTest extends TestCase
         echo func(1);
         CODE;
 
-        $this->expectOutputStringWithCode('2', $code);
+        $this->expectedOutputString('2')
+            ->runCode($code);
     }
 
     public function testCallVariableWithoutFunctionScope(): void
@@ -68,7 +71,8 @@ class FunctionTest extends TestCase
         echo func();
         CODE;
 
-        $this->expectOutputStringWithCode('', $code);
+        $this->expectedOutputString('')
+            ->runCode($code);
     }
 
     public function testWithDefaultValue(): void
@@ -83,7 +87,8 @@ class FunctionTest extends TestCase
         echo func();
         CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testInvalidArgument(): void
@@ -98,9 +103,9 @@ class FunctionTest extends TestCase
         echo func();
         CODE;
 
-        $this->expectException(Error::class);
-        $this->expectExceptionMessage('Uncaught ArgumentCountError: Too few arguments to function func()');
-        $this->interpreter->run($code);
+        $this->expectedException(Error::class)
+            ->expectedExceptionMessage('Uncaught ArgumentCountError: Too few arguments to function func()')
+            ->runCode($code);
     }
 
     public function testCallBuiltInFunction(): void
@@ -110,7 +115,8 @@ class FunctionTest extends TestCase
         echo in_array(1, [1, 2, 3], true);
         CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testDeclareBuiltInFunction(): void
@@ -122,8 +128,8 @@ class FunctionTest extends TestCase
         }
         CODE;
 
-        $this->expectException(Error::class);
-        $this->expectExceptionMessage('Cannot redeclare in_array()');
-        $this->interpreter->run($code);
+        $this->expectedException(Error::class)
+            ->expectedExceptionMessage('Cannot redeclare in_array()')
+            ->runCode($code);
     }
 }

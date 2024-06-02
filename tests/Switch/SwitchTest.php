@@ -24,7 +24,8 @@ class SwitchTest extends TestCase
         }
         CODE;
 
-        $this->expectOutputStringWithCode('a', $code);
+        $this->expectedOutputString('a')
+            ->runCode($code);
     }
 
     public function testSwitchDefault(): void
@@ -43,7 +44,8 @@ class SwitchTest extends TestCase
         }
         CODE;
 
-        $this->expectOutputStringWithCode('c', $code);
+        $this->expectedOutputString('c')
+            ->runCode($code);
     }
 
     public function testSwitchWithoutBreak(): void
@@ -60,7 +62,8 @@ class SwitchTest extends TestCase
         }
         CODE;
 
-        $this->expectOutputStringWithCode('012', $code);
+        $this->expectedOutputString('012')
+            ->runCode($code);
     }
 
     public function testSwitchWithMultiCase(): void
@@ -77,6 +80,7 @@ class SwitchTest extends TestCase
         }
         CODE;
 
-        $this->expectOutputStringWithCode('ok', $code);
+        $this->expectedOutputString('ok')
+            ->runCode($code);
     }
 }

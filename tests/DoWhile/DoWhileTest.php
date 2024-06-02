@@ -19,7 +19,8 @@ class DoWhileTest extends TestCase
         } while ($i > 0);
         CODE;
 
-        $this->expectOutputStringWithCode('0', $code);
+        $this->expectedOutputString('0')
+            ->runCode($code);
     }
 
     public function testBreakInNestedDoWhile(): void
@@ -41,7 +42,8 @@ class DoWhileTest extends TestCase
         } while ($a < 10);
         CODE;
 
-        $this->expectOutputStringWithCode('0012', $code);
+        $this->expectedOutputString('0012')
+            ->runCode($code);
     }
 
     public function testInvalidBreakNum(): void
@@ -53,9 +55,8 @@ class DoWhileTest extends TestCase
         } while (true);
         CODE;
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('cannot break 2 levels');
-
-        $this->interpreter->run($code);
+        $this->expectedException(Exception::class)
+            ->expectedExceptionMessage('cannot break 2 levels')
+            ->runCode($code);
     }
 }

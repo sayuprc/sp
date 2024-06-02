@@ -18,7 +18,8 @@ class UnsetTest extends TestCase
         echo $foo, $bar;
         CODE;
 
-        $this->expectOutputStringWithCode('fuga', $code);
+        $this->expectedOutputString('fuga')
+            ->runCode($code);
     }
 
     public function testUnsetMulti(): void
@@ -31,6 +32,7 @@ class UnsetTest extends TestCase
         echo $foo, $bar;
         CODE;
 
-        $this->expectOutputStringWithCode('', $code);
+        $this->expectedOutputString('')
+            ->runCode($code);
     }
 }

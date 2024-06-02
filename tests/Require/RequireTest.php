@@ -16,7 +16,8 @@ class RequireTest extends TestCase
         require 'tests/Require/data/require.php';
         CODE;
 
-        $this->expectOutputStringWithCode('require', $code);
+        $this->expectedOutputString('require')
+            ->runCode($code);
     }
 
     public function testRequireTwoTimes(): void
@@ -27,7 +28,8 @@ class RequireTest extends TestCase
         require 'tests/Require/data/require.php';
         CODE;
 
-        $this->expectOutputStringWithCode('requirerequire', $code);
+        $this->expectedOutputString('requirerequire')
+            ->runCode($code);
     }
 
     public function testNotExistsFile(): void
@@ -37,9 +39,8 @@ class RequireTest extends TestCase
         require 'tests/Require/data/not_exists.php';
         CODE;
 
-        $this->expectException(Error::class);
-        $this->expectExceptionMessage("Failed opening required 'tests/Require/data/not_exists.php'");
-
-        $this->interpreter->run($code);
+        $this->expectedException(Error::class)
+            ->expectedExceptionMessage("Failed opening required 'tests/Require/data/not_exists.php'")
+            ->runCode($code);
     }
 }

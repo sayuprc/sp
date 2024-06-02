@@ -25,10 +25,32 @@ class TestCase extends BaseTestCase
     /**
      * @param non-empty-string $code
      */
-    protected function expectOutputStringWithCode(string $expected, string $code): void
+    protected function runCode(string $code): void
+    {
+        $this->interpreter->run($code);
+    }
+
+    protected function expectedOutputString(string $expected): self
     {
         $this->expectOutputString($expected);
 
-        $this->interpreter->run($code);
+        return $this;
+    }
+
+    /**
+     * @param class-string $exception
+     */
+    protected function expectedException(string $exception): self
+    {
+        $this->expectException($exception);
+
+        return $this;
+    }
+
+    protected function expectedExceptionMessage(string $message): self
+    {
+        $this->expectExceptionMessage($message);
+
+        return $this;
     }
 }

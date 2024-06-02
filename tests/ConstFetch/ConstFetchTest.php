@@ -15,7 +15,8 @@ class ConstFetchTest extends TestCase
         echo true;
         CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testFalse(): void
@@ -25,7 +26,8 @@ class ConstFetchTest extends TestCase
         echo false;
         CODE;
 
-        $this->expectOutputStringWithCode('', $code);
+        $this->expectedOutputString('')
+            ->runCode($code);
     }
 
     public function testNull(): void
@@ -35,6 +37,7 @@ class ConstFetchTest extends TestCase
         echo null;
         CODE;
 
-        $this->expectOutputStringWithCode('', $code);
+        $this->expectedOutputString('')
+            ->runCode($code);
     }
 }

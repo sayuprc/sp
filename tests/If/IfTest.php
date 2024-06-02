@@ -17,7 +17,8 @@ class IfTest extends TestCase
 		}
 		CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testIfElseIf(): void
@@ -31,7 +32,8 @@ class IfTest extends TestCase
 		}
 		CODE;
 
-        $this->expectOutputStringWithCode('0', $code);
+        $this->expectedOutputString('0')
+            ->runCode($code);
     }
 
     public function testIfElse(): void
@@ -45,7 +47,8 @@ class IfTest extends TestCase
 		}
 		CODE;
 
-        $this->expectOutputStringWithCode('0', $code);
+        $this->expectedOutputString('0')
+            ->runCode($code);
     }
 
     public function testNestedIf(): void
@@ -59,7 +62,8 @@ class IfTest extends TestCase
 		}
 		CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testNestedElseIf(): void
@@ -75,7 +79,8 @@ class IfTest extends TestCase
 		}
 		CODE;
 
-        $this->expectOutputStringWithCode('0', $code);
+        $this->expectedOutputString('0')
+            ->runCode($code);
     }
 
     public function testNestedElse(): void
@@ -91,7 +96,8 @@ class IfTest extends TestCase
 		}
 		CODE;
 
-        $this->expectOutputStringWithCode('0', $code);
+        $this->expectedOutputString('0')
+            ->runCode($code);
     }
 
     public function testAllTrue(): void
@@ -107,6 +113,7 @@ class IfTest extends TestCase
 		}
 		CODE;
 
-        $this->expectOutputStringWithCode('a', $code);
+        $this->expectedOutputString('a')
+            ->runCode($code);
     }
 }

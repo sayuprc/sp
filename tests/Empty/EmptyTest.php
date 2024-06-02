@@ -16,7 +16,8 @@ class EmptyTest extends TestCase
         echo empty($var);
         CODE;
 
-        $this->expectOutputStringWithCode('', $code);
+        $this->expectedOutputString('')
+            ->runCode($code);
     }
 
     public function testEmptyString(): void
@@ -27,7 +28,8 @@ class EmptyTest extends TestCase
         echo empty($var);
         CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testStringZero(): void
@@ -38,7 +40,8 @@ class EmptyTest extends TestCase
         echo empty($var);
         CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testIntZero(): void
@@ -49,7 +52,8 @@ class EmptyTest extends TestCase
         echo empty($var);
         CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testNull(): void
@@ -60,7 +64,8 @@ class EmptyTest extends TestCase
         echo empty($var);
         CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testDefined(): void
@@ -71,7 +76,8 @@ class EmptyTest extends TestCase
         echo empty($var);
         CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testEmptyArray(): void
@@ -82,7 +88,8 @@ class EmptyTest extends TestCase
         echo empty($var);
         CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testNotEmptyArray(): void
@@ -93,6 +100,7 @@ class EmptyTest extends TestCase
         echo empty($var);
         CODE;
 
-        $this->expectOutputStringWithCode('', $code);
+        $this->expectedOutputString('')
+            ->runCode($code);
     }
 }

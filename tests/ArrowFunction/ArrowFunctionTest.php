@@ -16,7 +16,8 @@ class ArrowFunctionTest extends TestCase
         echo $func();
         CODE;
 
-        $this->expectOutputStringWithCode('1', $code);
+        $this->expectedOutputString('1')
+            ->runCode($code);
     }
 
     public function testReturnArg(): void
@@ -27,7 +28,8 @@ class ArrowFunctionTest extends TestCase
         echo $func(2);
         CODE;
 
-        $this->expectOutputStringWithCode('2', $code);
+        $this->expectedOutputString('2')
+            ->runCode($code);
     }
 
     public function testDefaultValue(): void
@@ -38,6 +40,7 @@ class ArrowFunctionTest extends TestCase
         echo $func();
         CODE;
 
-        $this->expectOutputStringWithCode('hoge', $code);
+        $this->expectedOutputString('hoge')
+            ->runCode($code);
     }
 }

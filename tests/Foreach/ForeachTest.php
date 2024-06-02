@@ -18,7 +18,8 @@ class ForeachTest extends TestCase
         }
         CODE;
 
-        $this->expectOutputStringWithCode('abc', $code);
+        $this->expectedOutputString('abc')
+            ->runCode($code);
     }
 
     public function testForeachWithKey(): void
@@ -30,7 +31,8 @@ class ForeachTest extends TestCase
         }
         CODE;
 
-        $this->expectOutputStringWithCode('0=>a1=>b2=>c', $code);
+        $this->expectedOutputString('0=>a1=>b2=>c')
+            ->runCode($code);
     }
 
     public function testForeachWithBreak(): void
@@ -45,7 +47,8 @@ class ForeachTest extends TestCase
         }
         CODE;
 
-        $this->expectOutputStringWithCode('a', $code);
+        $this->expectedOutputString('a')
+            ->runCode($code);
     }
 
     public function testBreakInNestedForeach(): void
@@ -63,7 +66,8 @@ class ForeachTest extends TestCase
         }
         CODE;
 
-        $this->expectOutputStringWithCode('112', $code);
+        $this->expectedOutputString('112')
+            ->runCode($code);
     }
 
     public function testInvalidBreakNum(): void
@@ -75,10 +79,9 @@ class ForeachTest extends TestCase
         }
         CODE;
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('cannot break 2 levels');
-
-        $this->interpreter->run($code);
+        $this->expectedException(Exception::class)
+            ->expectedExceptionMessage('cannot break 2 levels')
+            ->runCode($code);
     }
 
     public function testForeachWithContinue(): void
@@ -93,6 +96,7 @@ class ForeachTest extends TestCase
         }
         CODE;
 
-        $this->expectOutputStringWithCode('ac', $code);
+        $this->expectedOutputString('ac')
+            ->runCode($code);
     }
 }

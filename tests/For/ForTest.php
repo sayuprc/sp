@@ -18,7 +18,8 @@ class ForTest extends TestCase
         }
         CODE;
 
-        $this->expectOutputStringWithCode('0123456789', $code);
+        $this->expectedOutputString('0123456789')
+            ->runCode($code);
     }
 
     public function testForWithBreak(): void
@@ -33,7 +34,8 @@ class ForTest extends TestCase
         }
         CODE;
 
-        $this->expectOutputStringWithCode('01', $code);
+        $this->expectedOutputString('01')
+            ->runCode($code);
     }
 
     public function testBreakInNestedFor(): void
@@ -51,7 +53,8 @@ class ForTest extends TestCase
         }
         CODE;
 
-        $this->expectOutputStringWithCode('0012', $code);
+        $this->expectedOutputString('0012')
+            ->runCode($code);
     }
 
     public function testInvalidBreakNum(): void
@@ -63,10 +66,9 @@ class ForTest extends TestCase
         }
         CODE;
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('cannot break 2 levels');
-
-        $this->interpreter->run($code);
+        $this->expectedException(Exception::class)
+            ->expectedExceptionMessage('cannot break 2 levels')
+            ->runCode($code);
     }
 
     public function testForWithContinue(): void
@@ -81,6 +83,7 @@ class ForTest extends TestCase
         }
         CODE;
 
-        $this->expectOutputStringWithCode('013456789', $code);
+        $this->expectedOutputString('013456789')
+            ->runCode($code);
     }
 }

@@ -15,7 +15,8 @@ class IncludeOnceTest extends TestCase
         include_once 'tests/IncludeOnce/data/include_once.php';
         CODE;
 
-        $this->expectOutputStringWithCode('include_once', $code);
+        $this->expectedOutputString('include_once')
+            ->runCode($code);
     }
 
     public function testIncludeTwoTimes(): void
@@ -26,7 +27,8 @@ class IncludeOnceTest extends TestCase
         include_once 'tests/IncludeOnce/data/include_once.php';
         CODE;
 
-        $this->expectOutputStringWithCode('include_once', $code);
+        $this->expectedOutputString('include_once')
+            ->runCode($code);
     }
 
     public function testNotExistsFile(): void
@@ -36,6 +38,7 @@ class IncludeOnceTest extends TestCase
         include_once 'tests/IncludeOnce/data/not_exists.php';
         CODE;
 
-        $this->expectOutputStringWithCode('', $code);
+        $this->expectedOutputString('')
+            ->runCode($code);
     }
 }

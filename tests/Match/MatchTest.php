@@ -19,7 +19,8 @@ class MatchTest extends TestCase
         };
         CODE;
 
-        $this->expectOutputStringWithCode('ok', $code);
+        $this->expectedOutputString('ok')
+            ->runCode($code);
     }
 
     public function testMatchDefault(): void
@@ -32,7 +33,8 @@ class MatchTest extends TestCase
         };
         CODE;
 
-        $this->expectOutputStringWithCode('no', $code);
+        $this->expectedOutputString('no')
+            ->runCode($code);
     }
 
     public function testMatchUnhandled(): void
@@ -44,9 +46,8 @@ class MatchTest extends TestCase
         };
         CODE;
 
-        $this->expectException(Error::class);
-        $this->expectExceptionMessage('Unhandled match case');
-
-        $this->interpreter->run($code);
+        $this->expectedException(Error::class)
+            ->expectedExceptionMessage('Unhandled match case')
+            ->runCode($code);
     }
 }
