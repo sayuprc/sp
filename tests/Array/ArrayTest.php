@@ -11,14 +11,14 @@ class ArrayTest extends TestCase
     public function testArray(): void
     {
         $code = <<<'CODE'
-         <?php
-         $array = [
-            'foo',
-            'bar',
-            'buz',
-         ];
-         echo $array[0], $array[2];
-         CODE;
+        <?php
+        $array = [
+           'foo',
+           'bar',
+           'buz',
+        ];
+        echo $array[0], $array[2];
+        CODE;
 
         $this->expectedOutputString('foobuz')
             ->runCode($code);
