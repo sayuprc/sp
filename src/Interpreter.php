@@ -63,6 +63,7 @@ use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
@@ -73,12 +74,12 @@ use PhpParser\Parser;
 
 class Interpreter
 {
-    private Scope $currentScope;
-
     /**
-     * @var array<string, FunctionObject>
+     * @var array<string, NamespaceObject>
      */
-    private array $functions;
+    private array $namespaces;
+
+    private NamespaceObject $currentNameSpace;
 
     /**
      * @var int<0, max>
@@ -98,8 +99,9 @@ class Interpreter
         private readonly Parser $parser,
         private readonly bool $isDebug = false
     ) {
-        $this->currentScope = new Scope();
-        $this->functions = [];
+        $this->currentNameSpace = new NamespaceObject();
+        // default namespace is ''
+        $this->namespaces[''] = $this->currentNameSpace;
         $this->currentNest = 0;
         $this->includes = [];
     }
@@ -257,13 +259,13 @@ class Interpreter
                         throw new Exception('cannot re-assign $this');
                     }
                     $value = $this->evaluate($node->expr);
-                    $this->currentScope->set($name, $value);
+                    $this->currentNameSpace->currentScope->set($name, $value);
                     return $value;
                 }
                 break;
             case Variable::class:
                 $name = $node->name;
-                return $this->currentScope->get($name);
+                return $this->currentNameSpace->currentScope->get($name);
             case ConstFetch::class:
                 return match ($node->name->name) {
                     'true' => true,
@@ -283,7 +285,7 @@ class Interpreter
                 if (function_exists($name)) {
                     throw new Error("Cannot redeclare {$name}()");
                 }
-                $this->functions[$name] = new FunctionObject($node->params, $node->stmts);
+                $this->currentNameSpace->functions[$name] = new FunctionObject($node->params, $node->stmts);
                 break;
             case FuncCall::class:
                 if ($node->name instanceof Variable) {
@@ -300,7 +302,7 @@ class Interpreter
                             ! isset($args[$key]) && ! is_null($param->default) => $this->evaluate($param->default),
                             default => throw new Error("Uncaught ArgumentCountError: Too few arguments to function {$node->name->name}()"),
                         };
-                        $this->currentScope->set($param->var->name, $arg);
+                        $this->currentNameSpace->currentScope->set($param->var->name, $arg);
                     }
                     $result = $this->evaluate($function->expr);
                     $this->leaveScope();
@@ -313,8 +315,8 @@ class Interpreter
                         $args[] = $this->evaluate($arg);
                     }
                     return $name(...$args);
-                } elseif (array_key_exists($name, $this->functions)) {
-                    $function = $this->functions[$name];
+                } elseif (array_key_exists($name, $this->currentNameSpace->functions)) {
+                    $function = $this->currentNameSpace->functions[$name];
                     $args = [];
                     foreach ($node->args as $arg) {
                         $args[] = $this->evaluate($arg);
@@ -326,7 +328,7 @@ class Interpreter
                             ! isset($args[$key]) && ! is_null($param->default) => $this->evaluate($param->default),
                             default => throw new Error("Uncaught ArgumentCountError: Too few arguments to function {$name}()"),
                         };
-                        $this->currentScope->set($param->var->name, $arg);
+                        $this->currentNameSpace->currentScope->set($param->var->name, $arg);
                     }
                     foreach ($function->stmts as $stmt) {
                         $result = $this->evaluate($stmt);
@@ -347,10 +349,10 @@ class Interpreter
                 $array = $this->evaluate($node->expr);
                 foreach ($array as $key => $item) {
                     if ($node->valueVar instanceof Variable) {
-                        $this->currentScope->set($node->valueVar->name, $item);
+                        $this->currentNameSpace->currentScope->set($node->valueVar->name, $item);
                     }
                     if ($node->keyVar instanceof Variable) {
-                        $this->currentScope->set($node->keyVar->name, $key);
+                        $this->currentNameSpace->currentScope->set($node->keyVar->name, $key);
                     }
                     foreach ($node->stmts as $stmt) {
                         $result = $this->evaluate($stmt);
@@ -528,7 +530,7 @@ class Interpreter
             case Unset_::class:
                 foreach ($node->vars as $var) {
                     if ($var instanceof Variable) {
-                        $this->currentScope->remove($var->name);
+                        $this->currentNameSpace->currentScope->remove($var->name);
                     }
                 }
                 break;
@@ -537,6 +539,14 @@ class Interpreter
                 exit($status);
             case ArrowFunction::class:
                 return new ArrowFunctionObject($node->params, $node->expr);
+            case Namespace_::class:
+                $namespace = new NamespaceObject();
+                $this->namespaces[$node->name->toString()] = $namespace;
+                $this->currentNameSpace = $namespace;
+                foreach ($node->stmts as $stmt) {
+                    $this->evaluate($stmt);
+                }
+                break;
             default:
                 $token = $node instanceof Node
                     ? $node->getType()
@@ -547,19 +557,19 @@ class Interpreter
 
     private function enterScope(bool $shouldMerge = false): void
     {
-        $this->currentScope = new Scope($this->currentScope);
+        $this->currentNameSpace->currentScope = new Scope($this->currentNameSpace->currentScope);
 
         if ($shouldMerge) {
-            $this->currentScope->merge($this->currentScope->parentScope);
+            $this->currentNameSpace->currentScope->merge($this->currentNameSpace->currentScope->parentScope);
         }
     }
 
     private function leaveScope(): void
     {
-        if (is_null($this->currentScope->parentScope)) {
+        if (is_null($this->currentNameSpace->currentScope->parentScope)) {
             throw new LogicException('Parent scope is null');
         }
 
-        $this->currentScope = $this->currentScope->parentScope;
+        $this->currentNameSpace->currentScope = $this->currentNameSpace->currentScope->parentScope;
     }
 }
